@@ -81,6 +81,8 @@ Phan `scenario` nen mo ta du 4 y:
 | Provider | Delivery Model | Language | Scenario | File |
 | --- | --- | --- | --- | --- |
 | GitLab CI | Continuous Deployment | Java | Maven build + direct server deploy on tag | `templates/gitlab-ci/continuous-deployment/java/maven-jar-server-tag.yml` |
+| GitLab CI | Continuous Deployment | React | NPM build + static deploy to server on tag | `templates/gitlab-ci/continuous-deployment/react/npm-static-server-tag.yml` |
+| GitLab CI | Continuous Delivery | React | NPM build + manual static deploy to server on tag | `templates/gitlab-ci/continuous-delivery/react/npm-static-server-tag-manual.yml` |
 
 ## Cach them template moi
 

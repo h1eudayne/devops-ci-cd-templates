@@ -1,8 +1,9 @@
 variables:
-  projectname: shoe-ShoppingCart
+  projectName: shoe-ShoppingCart
   version: 0.0.1-SNAPSHOT
-  projectuser: shoeshop
-  projectpath: /datas/$projectuser/
+  projectUser: shoeshop
+  projectPath: /datas/$projectUser/
+  server: lab-server
 
 stages:
   - build
@@ -16,7 +17,7 @@ build:
   script:
     - mvn install -DskipTests=true
   tags:
-    - lab-server
+    - $server
   only:
     - tags
 
@@ -28,16 +29,16 @@ deploy:
   script:
     - |
       if [ "$GITLAB_USER_LOGIN" == "voduchieu1" ]; then
-        sudo cp target/$projectname-$version.jar $projectpath
-        sudo chown -R $projectuser. $projectpath
-        sudo kill -9 $(ps -ef | grep $projectname-$version.jar | grep -v grep | awk '{print $2}') || true
-        sudo su $projectuser -c "cd $projectpath; nohup java -jar     $projectname-$version.jar > nohup.out 2>&1 &"
+        sudo cp target/$projectName-$version.jar $projectPath
+        sudo chown -R $projectUser. $projectPath
+        sudo kill -9 $(ps -ef | grep $projectName-$version.jar | grep -v grep | awk '{print $2}') || true
+        sudo su $projectUser -c "cd $projectPath; nohup java -jar     $projectName-$version.jar > nohup.out 2>&1 &"
       else
         echo "Permission Denied"
         exit 1
       fi
   tags:
-    - lab-server
+    - $server
   only:
     - tags
 
@@ -47,8 +48,8 @@ showlog:
     GIT_STRATEGY: none
   when: manual
   script:
-    - sudo su $projectuser -c "cd $projectpath; tail -n 10000 nohup.out"
+    - sudo su $projectUser -c "cd $projectPath; tail -n 10000 nohup.out"
   tags:
-    - lab-server
+    - $server
   only:
     - tags
