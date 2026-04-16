@@ -11,3 +11,29 @@ templates:
     notes: >
       Pipeline build bang Maven, copy JAR len server local path,
       restart ung dung bang nohup va xem log sau deploy.
+
+  - id: gitlab-react-static-server-tag
+    provider: gitlab-ci
+    delivery_model: continuous-deployment
+    language: react
+    scenario: npm-static-server-tag
+    file: templates/gitlab-ci/continuous-deployment/react/npm-static-server-tag.yml
+    trigger: tags
+    deployment_target: linux-server
+    maturity: draft
+    notes: >
+      Pipeline build React app bang npm, copy thu muc build len server Linux
+      va hien thi danh sach file sau khi deploy.
+
+  - id: gitlab-react-static-server-tag-manual
+    provider: gitlab-ci
+    delivery_model: continuous-delivery
+    language: react
+    scenario: npm-static-server-tag-manual
+    file: templates/gitlab-ci/continuous-delivery/react/npm-static-server-tag-manual.yml
+    trigger: tags
+    deployment_target: linux-server
+    maturity: draft
+    notes: >
+      Pipeline build React app bang npm, giu buoc deploy o che do manual gate
+      truoc khi copy file build len server Linux.
