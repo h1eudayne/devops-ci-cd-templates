@@ -1,0 +1,54 @@
+variables:
+  projectname: shoe-ShoppingCart
+  version: 0.0.1-SNAPSHOT
+  projectuser: shoeshop
+  projectpath: /datas/$projectuser/
+
+stages:
+  - build
+  - deploy
+  - showlog
+
+build:
+  stage: build
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - mvn install -DskipTests=true
+  tags:
+    - lab-server
+  only:
+    - tags
+
+deploy:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  when: manual
+  script:
+    - |
+      if [ "$GITLAB_USER_LOGIN" == "voduchieu1" ]; then
+        sudo cp target/$projectname-$version.jar $projectpath
+        sudo chown -R $projectuser. $projectpath
+        sudo kill -9 $(ps -ef | grep $projectname-$version.jar | grep -v grep | awk '{print $2}') || true
+        sudo su $projectuser -c "cd $projectpath; nohup java -jar     $projectname-$version.jar > nohup.out 2>&1 &"
+      else
+        echo "Permission Denied"
+        exit 1
+      fi
+  tags:
+    - lab-server
+  only:
+    - tags
+
+showlog:
+  stage: showlog
+  variables:
+    GIT_STRATEGY: none
+  when: manual
+  script:
+    - sudo su $projectuser -c "cd $projectpath; tail -n 10000 nohup.out"
+  tags:
+    - lab-server
+  only:
+    - tags

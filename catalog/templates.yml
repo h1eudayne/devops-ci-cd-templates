@@ -1,0 +1,13 @@
+templates:
+  - id: gitlab-java-maven-jar-server-tag
+    provider: gitlab-ci
+    delivery_model: continuous-deployment
+    language: java
+    scenario: maven-jar-server-tag
+    file: templates/gitlab-ci/continuous-deployment/java/maven-jar-server-tag.yml
+    trigger: tags
+    deployment_target: linux-server
+    maturity: adapted
+    notes: >
+      Pipeline build bang Maven, copy JAR len server local path,
+      restart ung dung bang nohup va xem log sau deploy.
