@@ -83,6 +83,8 @@ templates/
       nodejs/
       python/
       shared/
+  shared/
+    nginx/
 ```
 
 ## Quy tac phan loai pipeline
@@ -141,6 +143,8 @@ Moi template nen co metadata trong `catalog/templates.yml` gom:
 - `trigger`
 - `deployment_target`
 - `notes`
+
+Tai nguyen dung chung khong thuoc rieng mot provider, nhu Nginx config mau hoac helper script dung lai cho nhieu template, co the dat trong `templates/shared/`.
 
 ## Huong phat trien repo
 

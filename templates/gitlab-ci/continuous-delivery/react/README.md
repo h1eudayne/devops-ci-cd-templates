@@ -31,3 +31,8 @@ Template nay duoc xep vao `continuous-delivery` vi buoc deploy van co manual gat
 - Pipeline dang dung `npm install` va `CI=false npm run build`
 - Lenh deploy chi copy de moi vao `projectPath`, khong xoa file cu khong con ton tai trong build moi
 - Neu can nhieu approver, rollback, hoac deploy qua CDN/object storage, nen tach thanh template khac
+
+## Server setup tham khao
+
+- Mau Nginx dung chung nam tai `templates/shared/nginx/react-spa-port-3000.conf.example`
+- File nay phu hop cho React SPA build ra static files va phuc vu tu `projectPath`

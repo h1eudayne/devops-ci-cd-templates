@@ -1,0 +1,28 @@
+/*
+- Tạo symlink
+sudo ln -s /etc/nginx/sites-available/vision /etc/nginx/sites-enabled/vision
+*/
+
+/*
+- Nếu báo File exists thì xóa link cũ rồi tạo lại
+sudo rm -f /etc/nginx/sites-enabled/vision
+sudo ln -s /etc/nginx/sites-available/vision /etc/nginx/sites-enabled/vision
+*/
+server {
+    listen 3000 default_server;
+    listen [::]:3000 default_server;
+
+    server_name _;
+
+    root /datas/vision;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /static/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}
