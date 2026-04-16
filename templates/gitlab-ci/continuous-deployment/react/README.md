@@ -30,3 +30,8 @@ Template nay duoc xep vao `continuous-deployment` vi pipeline tu dong copy artif
 - Pipeline dang dung `npm install` va `CI=false npm run build`
 - Lenh deploy chi copy de moi vao `projectPath`, khong xoa file cu khong con ton tai trong build moi
 - Neu du an dung `pnpm`, `yarn`, hoac can upload len object storage/CDN, nen tach ra template khac
+
+## Server setup tham khao
+
+- Mau Nginx dung chung nam tai `templates/shared/nginx/react-spa-port-3000.conf.example`
+- File nay da kem san comment ve symlink, `nginx -t`, va reload de copy dung nhanh

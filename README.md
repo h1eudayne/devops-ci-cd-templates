@@ -38,6 +38,9 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |   |       `-- java/
 |   |           |-- README.md
 |   |           `-- maven-jar-server-tag.yml
+|   |-- shared/
+|   |   `-- nginx/
+|   |       `-- react-spa-port-3000.conf.example
 |   `-- jenkins/
 |       |-- README.md
 |       |-- continuous-integration/
@@ -91,6 +94,8 @@ Phan `scenario` nen mo ta du 4 y:
 3. Them mo ta ngan vao `catalog/templates.yml`.
 4. Neu co bien bat buoc hoac buoc manual, ghi ro trong README cung cap template.
 5. Khong commit secret, token, host cu the, private key.
+
+Tai nguyen dung chung nhu config Nginx, shell snippet, hoac file phu tro co the dat trong `templates/shared/`.
 
 ## Goi y mo rong tiep theo
 
