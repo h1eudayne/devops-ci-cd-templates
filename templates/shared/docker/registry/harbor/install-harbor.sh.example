@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TOOLS_DIR="${TOOLS_DIR:-/tools/harbor}"
+HARBOR_DIR="${HARBOR_DIR:-$TOOLS_DIR/harbor}"
+DOMAIN="${DOMAIN:-registry.domain.cuaban}"
+EMAIL="${EMAIL:-email@cuaban}"
+
+if [ "$(id -u)" -ne 0 ] && command -v sudo >/dev/null 2>&1; then
+  SUDO="sudo"
+else
+  SUDO=""
+fi
+
+run() {
+  if [ -n "$SUDO" ]; then
+    "$SUDO" "$@"
+  else
+    "$@"
+  fi
+}
+
+setup_harbor() {
+  run apt update -y
+  run apt install certbot -y
+  run mkdir -p "$TOOLS_DIR"
+
+  cd "$TOOLS_DIR"
+
+  curl -s https://api.github.com/repos/goharbor/harbor/releases/latest \
+    | grep browser_download_url \
+    | cut -d '"' -f 4 \
+    | grep '\.tgz$' \
+    | wget -i -
+
+  tar xvzf harbor-offline-installer*.tgz
+
+  cd "$HARBOR_DIR"
+  cp harbor.yml.tmpl harbor.yml
+
+  run certbot certonly --standalone \
+    -d "$DOMAIN" \
+    --preferred-challenges http \
+    --agree-tos \
+    -m "$EMAIL" \
+    --keep-until-expiring
+
+  cat <<EOF
+Phan chuan bi da hoan tat.
+
+Hay chinh sua file:
+  $HARBOR_DIR/harbor.yml
+
+Goi y cau hinh:
+  hostname: $DOMAIN
+
+  https:
+    port: 443
+    certificate: /etc/letsencrypt/live/$DOMAIN/fullchain.pem
+    private_key: /etc/letsencrypt/live/$DOMAIN/privkey.pem
+
+Sau khi sua xong, chay:
+  bash install-harbor.sh install
+EOF
+}
+
+install_harbor() {
+  cd "$HARBOR_DIR"
+  ./prepare
+  ./install.sh
+
+  if command -v docker-compose >/dev/null 2>&1; then
+    docker-compose ps
+  else
+    docker compose ps
+  fi
+}
+
+usage() {
+  cat <<'EOF'
+Usage:
+  DOMAIN=registry.example.com EMAIL=admin@example.com bash install-harbor.sh setup
+  bash install-harbor.sh install
+
+Notes:
+  - Can chay tren may Ubuntu/Debian co Docker va Docker Compose da cai san.
+  - Lenh setup se tai Harbor offline installer, tao harbor.yml, va xin SSL bang Certbot.
+  - Sau khi chinh sua harbor.yml, dung lenh install de chay prepare/install.sh.
+EOF
+}
+
+case "${1:-}" in
+  setup)
+    setup_harbor
+    ;;
+  install)
+    install_harbor
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
