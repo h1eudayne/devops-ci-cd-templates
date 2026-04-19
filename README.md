@@ -39,6 +39,10 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |   |           |-- README.md
 |   |           `-- maven-jar-server-tag.yml
 |   |-- shared/
+|   |   |-- docker/
+|   |   |   `-- java/
+|   |   |       |-- README.md
+|   |   |       `-- maven-jar-openjdk8-jre-alpine.Dockerfile.example
 |   |   `-- nginx/
 |   |       `-- react-spa-port-3000.conf.example
 |   `-- jenkins/
@@ -95,7 +99,14 @@ Phan `scenario` nen mo ta du 4 y:
 4. Neu co bien bat buoc hoac buoc manual, ghi ro trong README cung cap template.
 5. Khong commit secret, token, host cu the, private key.
 
-Tai nguyen dung chung nhu config Nginx, shell snippet, hoac file phu tro co the dat trong `templates/shared/`.
+Tai nguyen dung chung nhu config Nginx, Dockerfile mau, shell snippet, hoac file phu tro co the dat trong `templates/shared/`.
+
+## Tai nguyen dung chung hien co
+
+| Nhom | Ngon ngu | Mo ta | File |
+| --- | --- | --- | --- |
+| Docker | Java | Multi-stage Maven build, copy JAR sang Alpine runtime va chay bang Java 8 | `templates/shared/docker/java/maven-jar-openjdk8-jre-alpine.Dockerfile.example` |
+| Nginx | React SPA | Nginx config mau cho React SPA chay tren port 3000 | `templates/shared/nginx/react-spa-port-3000.conf.example` |
 
 ## Goi y mo rong tiep theo
 
