@@ -85,7 +85,10 @@ templates/
       shared/
   shared/
     docker/
+      install/
+        ubuntu/
       java/
+      vuejs/
     nginx/
 ```
 
