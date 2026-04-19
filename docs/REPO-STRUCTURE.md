@@ -88,6 +88,9 @@ templates/
       install/
         ubuntu/
       java/
+      registry/
+        harbor/
+        private-registry-tls/
       vuejs/
     nginx/
 ```

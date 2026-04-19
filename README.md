@@ -47,6 +47,13 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |   |   |   |-- java/
 |   |   |   |   |-- README.md
 |   |   |   |   `-- maven-jar-openjdk8-jre-alpine.Dockerfile.example
+|   |   |   |-- registry/
+|   |   |   |   |-- harbor/
+|   |   |   |   |   |-- README.md
+|   |   |   |   |   `-- install-harbor.sh.example
+|   |   |   |   `-- private-registry-tls/
+|   |   |   |       |-- README.md
+|   |   |   |       `-- docker-compose.yml.example
 |   |   |   `-- vuejs/
 |   |   |       |-- README.md
 |   |   |       `-- npm-dist-nginx-alpine.Dockerfile.example
@@ -114,6 +121,8 @@ Tai nguyen dung chung nhu config Nginx, Dockerfile mau, shell snippet, hoac file
 | --- | --- | --- | --- |
 | Docker | Ubuntu | Bash script cai Docker Engine va standalone Docker Compose tren Ubuntu | `templates/shared/docker/install/ubuntu/install-docker-and-compose.sh.example` |
 | Docker | Java | Multi-stage Maven build, copy JAR sang Alpine runtime va chay bang Java 8 | `templates/shared/docker/java/maven-jar-openjdk8-jre-alpine.Dockerfile.example` |
+| Docker | Registry | Script mau cai Harbor offline, xin TLS bang Certbot va chay prepare/install sau khi review harbor.yml | `templates/shared/docker/registry/harbor/install-harbor.sh.example` |
+| Docker | Registry | Huong dan tao private registry voi TLS self-signed certificate va Docker Compose | `templates/shared/docker/registry/private-registry-tls/docker-compose.yml.example` |
 | Docker | VueJS | Multi-stage npm build, copy `dist` sang Nginx runtime va phuc vu static file | `templates/shared/docker/vuejs/npm-dist-nginx-alpine.Dockerfile.example` |
 | Nginx | React SPA | Nginx config mau cho React SPA chay tren port 3000 | `templates/shared/nginx/react-spa-port-3000.conf.example` |
 
