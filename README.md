@@ -43,7 +43,8 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |   |   |   |-- install/
 |   |   |   |   `-- ubuntu/
 |   |   |   |       |-- README.md
-|   |   |   |       `-- install-docker-and-compose.sh.example
+|   |   |   |       |-- install-docker-and-compose.sh.example
+|   |   |   |       `-- install-jenkins.sh.example
 |   |   |   |-- compose/
 |   |   |   |   `-- backend-mariadb/
 |   |   |   |       |-- README.md
@@ -69,6 +70,13 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |       |   `-- README.md
 |       |-- continuous-delivery/
 |       |   `-- README.md
+|       |-- install/
+|       |   `-- ubuntu/
+|       |       |-- README.md
+|       |       `-- install-jenkins.sh.example
+|       |-- reverse-proxy/
+|       |   |-- README.md
+|       |   `-- nginx-jenkins-subdomain.conf.example
 |       `-- continuous-deployment/
 |           `-- README.md
 `-- .gitignore
@@ -126,6 +134,7 @@ Tai nguyen dung chung nhu config Nginx, Dockerfile mau, shell snippet, hoac file
 | --- | --- | --- | --- |
 | Docker | Compose | Docker Compose stack mau cho backend image + MariaDB voi bien moi truong de doi theo tung project | `templates/shared/docker/compose/backend-mariadb/docker-compose.yml.example` |
 | Docker | Ubuntu | Bash script cai Docker Engine va standalone Docker Compose tren Ubuntu | `templates/shared/docker/install/ubuntu/install-docker-and-compose.sh.example` |
+| Docker | Ubuntu | Bash script cai Jenkins tren Ubuntu bang Jenkins apt repository va Java 21 | `templates/shared/docker/install/ubuntu/install-jenkins.sh.example` |
 | Docker | Java | Multi-stage Maven build, copy JAR sang Alpine runtime va chay bang Java 8 | `templates/shared/docker/java/maven-jar-openjdk8-jre-alpine.Dockerfile.example` |
 | Docker | Registry | Script mau cai Harbor offline, xin TLS bang Certbot va chay prepare/install sau khi review harbor.yml | `templates/shared/docker/registry/harbor/install-harbor.sh.example` |
 | Docker | Registry | Huong dan tao private registry voi TLS self-signed certificate va Docker Compose | `templates/shared/docker/registry/private-registry-tls/docker-compose.yml.example` |

@@ -83,6 +83,9 @@ templates/
       nodejs/
       python/
       shared/
+    install/
+      ubuntu/
+    reverse-proxy/
   shared/
     docker/
       compose/
