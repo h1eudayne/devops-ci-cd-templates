@@ -85,6 +85,8 @@ templates/
       shared/
   shared/
     docker/
+      compose/
+        backend-mariadb/
       install/
         ubuntu/
       java/

@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  db1:
+    image: mariadb:10.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-change-me-root-password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app_db}
+      MYSQL_USER: ${MYSQL_USER:-app_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-change-me-app-password}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "${DB_HOST_PORT:-3307}:3306"
+
+  app-backend:
+    image: ${APP_IMAGE:-your-backend-image:latest}
+    restart: always
+    depends_on:
+      - db1
+    ports:
+      - "${APP_HOST_PORT:-8082}:8080"
+    environment:
+      DB_HOST: ${DB_HOST:-db1}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_NAME: ${DB_NAME:-app_db}
+      DB_USER: ${DB_USER:-app_user}
+      DB_PASSWORD: ${DB_PASSWORD:-change-me-app-password}
+
+volumes:
+  mariadb_data:

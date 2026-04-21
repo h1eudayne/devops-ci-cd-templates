@@ -1,24 +1,50 @@
-## build stage ##
-FROM maven:3.5.3-jdk-8-alpine AS build
+variables:
+  # docker image: domain/project-registry/project-gitlab:tag_commit
+  DOCKER_IMAGE: ${REGISTRY_URL}/${REGISTRY_PROJECT}/${CI_PROJECT_NAME}:${CI_COMMIT_TAG}_${CI_COMMIT_SHORT_SHA}
+  DOCKER_CONTAINER: ${CI_PROJECT_NAME}
+stages:
+  - buildandpush
+  - deploy
+  - showlog
 
-WORKDIR /app
-COPY . .
-RUN mvn install -DskipTests=true
+build:
+  stage: buildandpush
+  variables:
+    GIT_STRATEGY: clone
+  before_script:
+    - docker login ${REGISTRY_URL} -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD}
+  script:
+    - docker build -t ${DOCKER_IMAGE} .
+    - docker push ${DOCKER_IMAGE}
+  tags:
+    - lab-server
+  only:
+    - tags
 
-## run stage ##
-FROM alpine:3.19
+deploy:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  when: manual
+  before_script:
+    - docker login ${REGISTRY_URL} -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD}
+  script:
+    - docker pull ${DOCKER_IMAGE}
+    - docker rm -f ${DOCKER_CONTAINER}
+    - docker run --name ${DOCKER_CONTAINER} -dp 8080:8080 ${DOCKER_IMAGE}
+  tags:
+    - lab-server
+  only:
+    - tags
 
-RUN adduser -D appuser \
-    && apk add --no-cache openjdk8-jre-base
-
-WORKDIR /run
-# Thay ten JAR ben duoi bang artifact Maven thuc te cua project.
-COPY --from=build /app/target/your-app-0.0.1-SNAPSHOT.jar /run/app.jar
-
-RUN chown -R appuser:appuser /run
-
-USER appuser
-
-EXPOSE 8080
-
-ENTRYPOINT ["/usr/lib/jvm/java-1.8-openjdk/bin/java", "-jar", "/run/app.jar"]
+showlog:
+  stage: showlog
+  variables:
+    GIT_STRATEGY: none
+  when: manual
+  script:
+    - docker logs ${DOCKER_CONTAINER}
+  tags:
+    - lab-server
+  only:
+    - tags

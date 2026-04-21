@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# cp install-harbor.sh.example install-harbor.sh
+# chmod +x install-harbor.sh
 set -euo pipefail
 
 TOOLS_DIR="${TOOLS_DIR:-/tools/harbor}"
