@@ -70,6 +70,13 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |       |   `-- README.md
 |       |-- continuous-delivery/
 |       |   `-- README.md
+|       |-- install/
+|       |   `-- ubuntu/
+|       |       |-- README.md
+|       |       `-- install-jenkins.sh.example
+|       |-- reverse-proxy/
+|       |   |-- README.md
+|       |   `-- nginx-jenkins-subdomain.conf.example
 |       `-- continuous-deployment/
 |           `-- README.md
 `-- .gitignore
