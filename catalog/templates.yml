@@ -37,3 +37,16 @@ templates:
     notes: >
       Pipeline build React app bang npm, giu buoc deploy o che do manual gate
       truoc khi copy file build len server Linux.
+
+  - id: gitlab-docker-image-server-tag-manual
+    provider: gitlab-ci
+    delivery_model: continuous-delivery
+    language: docker
+    scenario: docker-image-server-tag-manual
+    file: templates/gitlab-ci/continuous-delivery/docker/docker-image-server-tag-manual.yml
+    trigger: tags
+    deployment_target: docker-host
+    maturity: adapted
+    notes: >
+      Pipeline build Docker image, push len private registry, giu buoc deploy
+      container o che do manual va co job xem log sau deploy.

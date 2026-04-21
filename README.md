@@ -44,6 +44,10 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |   |   |   |   `-- ubuntu/
 |   |   |   |       |-- README.md
 |   |   |   |       `-- install-docker-and-compose.sh.example
+|   |   |   |-- compose/
+|   |   |   |   `-- backend-mariadb/
+|   |   |   |       |-- README.md
+|   |   |   |       `-- docker-compose.yml.example
 |   |   |   |-- java/
 |   |   |   |   |-- README.md
 |   |   |   |   `-- maven-jar-openjdk8-jre-alpine.Dockerfile.example
@@ -104,6 +108,7 @@ Phan `scenario` nen mo ta du 4 y:
 | GitLab CI | Continuous Deployment | Java | Maven build + direct server deploy on tag | `templates/gitlab-ci/continuous-deployment/java/maven-jar-server-tag.yml` |
 | GitLab CI | Continuous Deployment | React | NPM build + static deploy to server on tag | `templates/gitlab-ci/continuous-deployment/react/npm-static-server-tag.yml` |
 | GitLab CI | Continuous Delivery | React | NPM build + manual static deploy to server on tag | `templates/gitlab-ci/continuous-delivery/react/npm-static-server-tag-manual.yml` |
+| GitLab CI | Continuous Delivery | Docker | Docker build + push registry + manual container deploy on tag | `templates/gitlab-ci/continuous-delivery/docker/docker-image-server-tag-manual.yml` |
 
 ## Cach them template moi
 
@@ -119,6 +124,7 @@ Tai nguyen dung chung nhu config Nginx, Dockerfile mau, shell snippet, hoac file
 
 | Nhom | Ngon ngu | Mo ta | File |
 | --- | --- | --- | --- |
+| Docker | Compose | Docker Compose stack mau cho backend image + MariaDB voi bien moi truong de doi theo tung project | `templates/shared/docker/compose/backend-mariadb/docker-compose.yml.example` |
 | Docker | Ubuntu | Bash script cai Docker Engine va standalone Docker Compose tren Ubuntu | `templates/shared/docker/install/ubuntu/install-docker-and-compose.sh.example` |
 | Docker | Java | Multi-stage Maven build, copy JAR sang Alpine runtime va chay bang Java 8 | `templates/shared/docker/java/maven-jar-openjdk8-jre-alpine.Dockerfile.example` |
 | Docker | Registry | Script mau cai Harbor offline, xin TLS bang Certbot va chay prepare/install sau khi review harbor.yml | `templates/shared/docker/registry/harbor/install-harbor.sh.example` |
