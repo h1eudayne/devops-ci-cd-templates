@@ -17,6 +17,7 @@ templates/jenkins/
 ## Vi du ten file
 
 - `maven-test.Jenkinsfile`
+- `maven-jar-linux-deploy.Jenkinsfile`
 - `docker-k8s-main.Jenkinsfile`
 - `install/ubuntu/install-jenkins.sh.example`
 - `reverse-proxy/nginx-jenkins-subdomain.conf.example`
