@@ -347,13 +347,61 @@ Vao **Dashboard → Projects/Namespaces → Create Project**.
 
 Tao namespace cho du an (vd: `ecommerce`).
 
-### 3. Apply file YAML fullstack
+### 3. Tao ConfigMap cho Backend
+
+Tao ConfigMap chua `application.properties` de backend doc cau hinh tu K8s thay vi hardcode trong image.
+
+**Noi dung file ConfigMap:**
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ecommerce-backend-application-properties-configmap
+  namespace: ecommerce
+data:
+  # Luu y: ten key phai trung voi ten file da setup trong Dockerfile (spring.config.location)
+  application.properties: |
+    spring.datasource.url=jdbc:mysql://192.168.1.115:3306/full-stack-ecommerce #chu y thay doi dia chi IP cua ban
+    spring.datasource.username=ecommerceapp
+    spring.datasource.password=StrongPa55WorD
+    spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
+    spring.datasource.sql-script-encoding=UTF-8
+
+    spring.jpa.properties.hibernate.globally_quoted_identifiers=true
+    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+    spring.jpa.hibernate.ddl-auto=none
+    spring.jpa.show-sql=true
+    spring.jpa.properties.hibernate.format_sql=true
+
+    spring.data.rest.base-path=/api
+    spring.data.rest.detection-strategy=ANNOTATED
+
+    allowed.origins=http://ecommerce.devopsedu.vn
+
+    okta.oauth2.client-id=0oab0lzwjoN1Rjsar5d7
+    okta.oauth2.issuer=https://dev-82108115.okta.com/oauth2/default
+```
+
+Apply ConfigMap:
+
+```bash
+kubectl apply -f ecommerce-backend-configmap.yml
+```
+
+Kiem tra:
+
+```bash
+kubectl get configmap -n ecommerce
+```
+
+### 4. Apply file YAML fullstack
 
 Su dung template [`fullstack-rolling-clusterip-ingress.yml.example`](../../templates/kubernetes/full-stack/fullstack-rolling-clusterip-ingress.yml.example).
 
 Thay the cac placeholder va apply. Lam rieng cho **frontend** va **backend** (2 file YAML rieng).
 
-**Vi du file YAML cho Backend:**
+**Vi du file YAML cho Backend (voi ConfigMap volume mount):**
 
 ```yaml
 apiVersion: apps/v1
@@ -388,6 +436,13 @@ spec:
             - containerPort: 8080
               name: tcp
               protocol: TCP
+          volumeMounts:
+            - name: app-config
+              mountPath: /config
+      volumes:
+        - name: app-config
+          configMap:
+            name: ecommerce-backend-application-properties-configmap
 ---
 apiVersion: v1
 kind: Service
@@ -519,7 +574,7 @@ Apply:
 kubectl apply -f ecommerce-frontend.yml
 ```
 
-### 4. Add host tren may client (neu chua co DNS)
+### 5. Add host tren may client (neu chua co DNS)
 
 ```bash
 # Tren may can truy cap, them vao /etc/hosts (Linux) hoac C:\Windows\System32\drivers\etc\hosts (Windows)
@@ -527,11 +582,12 @@ kubectl apply -f ecommerce-frontend.yml
 <ip-loadbalancer> <domain-backend>
 ```
 
-### 5. Kiem tra
+### 6. Kiem tra
 
 ```bash
 kubectl get all -n <namespace>
 kubectl get ingress -n <namespace>
+kubectl get configmap -n <namespace>
 ```
 
 Truy cap domain tren trinh duyet de kiem tra.
