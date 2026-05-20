@@ -70,18 +70,20 @@ spec:
       containers:
         - name: ecommerce-backend
           volumeMounts:
-            - name: app-config
-              mountPath: /config
+            - mountPath: /run/src/main/resources/application.properties
+              name: ecommerce-backend-application-properties-config-volume
+              subPath: application.properties
       volumes:
-        - name: app-config
-          configMap:
+        - configMap:
+            defaultMode: 420
             name: ecommerce-backend-application-properties-configmap
+          name: ecommerce-backend-application-properties-config-volume
 ```
 
 Dockerfile backend phai co:
 
 ```dockerfile
-ENTRYPOINT ["java", "-jar", "app.jar", "--spring.config.location=/config/application.properties"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.config.location=/run/src/main/resources/application.properties"]
 ```
 
 ## Tai lieu lien quan

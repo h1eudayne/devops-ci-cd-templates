@@ -265,9 +265,9 @@ COPY --from=build src/target/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar /run/sprin
 
 EXPOSE 8080
 
-# Dung voi K8s ConfigMap: mount application.properties vao /config/ roi tro spring.config.location den do.
+# Dung voi K8s ConfigMap: mount application.properties vao /run/src/main/resources/
 # Neu khong dung ConfigMap, bo "--spring.config.location=..." di.
-ENTRYPOINT ["java", "-jar", "/run/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar", "--spring.config.location=/config/application.properties"]
+ENTRYPOINT ["java", "-jar", "/run/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar", "--spring.config.location=/run/src/main/resources/application.properties"]
 ```
 
 > **Luu y**: Tham so `--spring.config.location` phai nam **ben trong** mang JSON cua `ENTRYPOINT`.
@@ -440,12 +440,14 @@ spec:
               name: tcp
               protocol: TCP
           volumeMounts:
-            - name: app-config
-              mountPath: /config
+            - mountPath: /run/src/main/resources/application.properties
+              name: ecommerce-backend-application-properties-config-volume
+              subPath: application.properties
       volumes:
-        - name: app-config
-          configMap:
+        - configMap:
+            defaultMode: 420
             name: ecommerce-backend-application-properties-configmap
+          name: ecommerce-backend-application-properties-config-volume
 ---
 apiVersion: v1
 kind: Service
