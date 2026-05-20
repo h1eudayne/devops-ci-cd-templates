@@ -17,6 +17,6 @@ COPY --from=build src/target/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar /run/sprin
 
 EXPOSE 8080
 
-# Dung voi K8s ConfigMap: mount application.properties vao /config/ roi tro spring.config.location den do.
+# Dung voi K8s ConfigMap: mount application.properties vao /run/src/main/resources/
 # Neu khong dung ConfigMap, bo "--spring.config.location=..." di.
-ENTRYPOINT ["java", "-jar", "/run/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar", "--spring.config.location=/config/application.properties"]
+ENTRYPOINT ["java", "-jar", "/run/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar", "--spring.config.location=/run/src/main/resources/application.properties"]

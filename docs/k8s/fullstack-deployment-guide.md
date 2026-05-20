@@ -243,7 +243,7 @@ spring.datasource.password=<DB_PASSWORD>
 
 Copy tu [`maven-jar-temurin17-jre-alpine.Dockerfile.example`](../../templates/docker/backend/java/maven-jar-temurin17-jre-alpine.Dockerfile.example) (Java 17) hoac [`maven-jar-openjdk8-jre-alpine.Dockerfile.example`](../../templates/docker/backend/java/maven-jar-openjdk8-jre-alpine.Dockerfile.example) (Java 8).
 
-**Noi dung file `Dockerfile` (Java 17):**
+**Noi dung file `Dockerfile` (Java 17 + ConfigMap support):**
 
 ```dockerfile
 ## build stage ##
@@ -265,8 +265,13 @@ COPY --from=build src/target/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar /run/sprin
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/run/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar"]
+# Dung voi K8s ConfigMap: mount application.properties vao /run/src/main/resources/
+# Neu khong dung ConfigMap, bo "--spring.config.location=..." di.
+ENTRYPOINT ["java", "-jar", "/run/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar", "--spring.config.location=/run/src/main/resources/application.properties"]
 ```
+
+> **Luu y**: Tham so `--spring.config.location` phai nam **ben trong** mang JSON cua `ENTRYPOINT`.
+> Phan nam ngoai dau `]` se bi Docker bo qua.
 
 ### 3. Build Docker image
 
@@ -342,13 +347,70 @@ Vao **Dashboard → Projects/Namespaces → Create Project**.
 
 Tao namespace cho du an (vd: `ecommerce`).
 
-### 3. Apply file YAML fullstack
+### 3. Tao ConfigMap cho Backend
+
+Tao ConfigMap chua `application.properties` de backend doc cau hinh tu K8s thay vi hardcode trong image.
+
+> Tai lieu tham khao: [`kubernetes/configmap/README.md`](../../templates/kubernetes/configmap/README.md)
+> Template: [`configmap-spring-properties.yml.example`](../../templates/kubernetes/configmap/configmap-spring-properties.yml.example)
+
+**Noi dung file ConfigMap:**
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ecommerce-backend-application-properties-configmap
+  namespace: ecommerce
+data:
+  # Luu y: ten key phai trung voi ten file da setup trong Dockerfile (spring.config.location)
+  application.properties: |
+    spring.datasource.url=jdbc:mysql://192.168.1.115:3306/full-stack-ecommerce #chu y thay doi dia chi IP cua ban
+    spring.datasource.username=ecommerceapp
+    spring.datasource.password=StrongPa55WorD
+    spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
+    spring.datasource.sql-script-encoding=UTF-8
+
+    spring.jpa.properties.hibernate.globally_quoted_identifiers=true
+    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+    spring.jpa.hibernate.ddl-auto=none
+    spring.jpa.show-sql=true
+    spring.jpa.properties.hibernate.format_sql=true
+
+    spring.data.rest.base-path=/api
+    spring.data.rest.detection-strategy=ANNOTATED
+
+    allowed.origins=http://ecommerce.devopsedu.vn
+
+    okta.oauth2.client-id=0oab0lzwjoN1Rjsar5d7
+    okta.oauth2.issuer=https://dev-82108115.okta.com/oauth2/default
+```
+
+Apply ConfigMap:
+
+```bash
+kubectl apply -f ecommerce-backend-configmap.yml
+```
+
+Kiem tra:
+
+```bash
+kubectl get configmap -n ecommerce
+```
+
+> **Luu y**: Khi thay doi noi dung ConfigMap, pod **khong tu dong cap nhat** (dac biet khi dung `subPath`).
+> Can redeploy lai pod de ap dung cau hinh moi:
+> ```bash
+> kubectl rollout restart deployment/ecommerce-backend-deployment -n ecommerce
+> ```
+
+### 4. Apply file YAML fullstack
 
 Su dung template [`fullstack-rolling-clusterip-ingress.yml.example`](../../templates/kubernetes/full-stack/fullstack-rolling-clusterip-ingress.yml.example).
 
 Thay the cac placeholder va apply. Lam rieng cho **frontend** va **backend** (2 file YAML rieng).
 
-**Vi du file YAML cho Backend:**
+**Vi du file YAML cho Backend (voi ConfigMap volume mount):**
 
 ```yaml
 apiVersion: apps/v1
@@ -383,6 +445,15 @@ spec:
             - containerPort: 8080
               name: tcp
               protocol: TCP
+          volumeMounts:
+            - mountPath: /run/src/main/resources/application.properties
+              name: ecommerce-backend-application-properties-config-volume
+              subPath: application.properties
+      volumes:
+        - configMap:
+            defaultMode: 420
+            name: ecommerce-backend-application-properties-configmap
+          name: ecommerce-backend-application-properties-config-volume
 ---
 apiVersion: v1
 kind: Service
@@ -514,7 +585,7 @@ Apply:
 kubectl apply -f ecommerce-frontend.yml
 ```
 
-### 4. Add host tren may client (neu chua co DNS)
+### 5. Add host tren may client (neu chua co DNS)
 
 ```bash
 # Tren may can truy cap, them vao /etc/hosts (Linux) hoac C:\Windows\System32\drivers\etc\hosts (Windows)
@@ -522,11 +593,12 @@ kubectl apply -f ecommerce-frontend.yml
 <ip-loadbalancer> <domain-backend>
 ```
 
-### 5. Kiem tra
+### 6. Kiem tra
 
 ```bash
 kubectl get all -n <namespace>
 kubectl get ingress -n <namespace>
+kubectl get configmap -n <namespace>
 ```
 
 Truy cap domain tren trinh duyet de kiem tra.
@@ -543,6 +615,7 @@ Truy cap domain tren trinh duyet de kiem tra.
 | Nginx config | Angular nginx.conf | [`docker/frontend/angular/nginx.conf.example`](../../templates/docker/frontend/angular/nginx.conf.example) |
 | Dockerfile Backend | Java Dockerfile | [`docker/backend/java/`](../../templates/docker/backend/java/README.md) |
 | K8s Fullstack YAML | Deployment + Service + Ingress | [`kubernetes/full-stack/`](../../templates/kubernetes/full-stack/README.md) |
+| K8s ConfigMap | ConfigMap cho Spring Boot | [`kubernetes/configmap/`](../../templates/kubernetes/configmap/README.md) |
 | Rancher | Cai dat Rancher Server | [`shared/rancher/`](../../templates/shared/rancher/README.md) |
 | Ingress Nginx | Cai Ingress Controller | [`shared/ingress-nginx/install/ubuntu/`](../../templates/shared/ingress-nginx/install/ubuntu/README.md) |
 
