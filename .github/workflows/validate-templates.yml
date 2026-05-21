@@ -38,9 +38,9 @@ jobs:
 
       - name: Validate catalog/templates.yml
         run: |
-          $catalogFile = "catalog\templates.yml"
+          $catalogFile = "catalog/templates.yml"
           if (Test-Path $catalogFile) {
-            python -c "import yaml; yaml.safe_load(open('$catalogFile', encoding='utf-8').read()); print('OK: catalog/templates.yml')"
+            python -c "import yaml; yaml.safe_load(open('catalog/templates.yml', encoding='utf-8').read()); print('OK: catalog/templates.yml')"
             if ($LASTEXITCODE -ne 0) {
               Write-Error "catalog/templates.yml has YAML syntax errors"
               exit 1
