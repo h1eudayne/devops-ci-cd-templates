@@ -111,6 +111,15 @@ shared:
       Bash script cai dat Metrics Server cho Kubernetes su dung Helm,
       ho tro cau hinh bo qua xac thuc TLS doi voi certificate tu ky.
 
+  - id: shared-k8s-hpa-setup-guide
+    category: kubernetes
+    platform: ubuntu
+    file: templates/shared/kubernetes/setup-hpa/setup-hpa-guide.md
+    maturity: draft
+    notes: >
+      Huong dan chi tiet cach cai dat Metrics Server, fix loi tren Rancher
+      va cau hinh HPA cho cum Kubernetes.
+
 kubernetes:
   - id: k8s-namespace-template
     kind: Namespace

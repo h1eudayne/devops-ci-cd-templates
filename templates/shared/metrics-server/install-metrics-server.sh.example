@@ -1,99 +1,32 @@
 #!/bin/bash
 
 # ==============================================================================
-# install-metrics-server.sh
-# Script cai dat Metrics Server cho Kubernetes dung Helm.
-# Chay script nay tren node co quyen kubectl va da cai dat Helm.
+# Script cài đặt Metrics Server cho Kubernetes sử dụng Helm
 # ==============================================================================
 
 set -euo pipefail
 
-# ------------------------------------------------------------------------------
-# Bien cau hinh - Thay doi cho phu hop voi moi truong
-# ------------------------------------------------------------------------------
-NAMESPACE="kube-system"
-RELEASE_NAME="metrics-server"
-TEMP_DIR="/tmp/metrics-server-install"
-
-# On-premise clusters thuong dung TLS tu ky cho Kubelet, can set INSECURE_TLS="true"
-# de tranh loi: "x509: certificate signed by unknown authority"
-INSECURE_TLS="true"
-
-# ==============================================================================
-# Buoc 1: Them va cap nhat Helm repository
-# ==============================================================================
-echo ">>> [1/4] Them va cap nhat Helm repo cho metrics-server ..."
+# 1. Thêm và cập nhật Helm repository
+echo ">>> Thêm Helm repository cho metrics-server..."
 helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
 helm repo update
 
-# ==============================================================================
-# Buoc 2: Tai va giai nen Helm chart de cau hinh
-# ==============================================================================
-echo ">>> [2/4] Tai va giai nen chart vao thu muc tam ..."
-rm -rf "${TEMP_DIR}"
-mkdir -p "${TEMP_DIR}"
-cd "${TEMP_DIR}"
-
-helm pull metrics-server/metrics-server --untar
-
-# ==============================================================================
-# Buoc 3: Cau hinh values.yaml (ho tro kubelet-insecure-tls cho cum On-Premise)
-# ==============================================================================
-echo ">>> [3/4] Cau hinh file values.yaml ..."
-VALUES_FILE="${TEMP_DIR}/metrics-server/values.yaml"
-
-if [ "${INSECURE_TLS}" = "true" ]; then
-    echo "  - Kich hoat che do --kubelet-insecure-tls cho Kubelet certificate tu ky"
-    
-    # Kiem tra va chen tham so vao danh sach args cua container trong values.yaml
-    # Cach thong dung trong chart metrics-server values.yaml la nap them argument vao default args:
-    # args:
-    #   - --kubelet-insecure-tls
-    
-    # Thay the/them args vao values.yaml
-    # Su dung python hoac sed de sua file an toan. O day dung sed de thay doi dong chua args mac dinh.
-    # Trong values.yaml cua metrics-server, thuong co phan `defaultArgs:` hoac `args:`
-    # De don gian va an toan, ta se thong qua tham so `--set` cua helm install luc deploy thay vi sua truc tiep values.yaml
-    # hoac ta co the ghi de values.yaml. Tuy nhien, sua truc tiep values.yaml giup luu lai lich su cau hinh.
-    
-    # Them option `--kubelet-insecure-tls` vao phan args:
-    # Truoc:
-    # defaultArgs:
-    #   - --cert-dir=/tmp
-    #   - --logtostderr
-    #   - --secure-port=10443
-    
-    # Ta se dung sed de chen them dong - --kubelet-insecure-tls ngay sau dong defaultArgs:
-    sed -i '/defaultArgs:/a \  - --kubelet-insecure-tls' "${VALUES_FILE}"
-fi
-
-# ==============================================================================
-# Buoc 4: Tien hanh cai dat len Kubernetes
-# ==============================================================================
-echo ">>> [4/4] Tien hanh cai dat Metrics Server vao namespace: ${NAMESPACE} ..."
-
-# Dam bao namespace da ton tai
-kubectl create ns "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
-
-# Cai dat bang helm tu thu muc chart da tai ve va sua doi
-helm upgrade --install "${RELEASE_NAME}" "${TEMP_DIR}/metrics-server" \
-    --namespace "${NAMESPACE}" \
-    -f "${VALUES_FILE}"
-
-# Don dep thu muc tam
-rm -rf "${TEMP_DIR}"
+# 2. Tiến hành cài đặt/nâng cấp Metrics Server
+# Thêm cờ --kubelet-insecure-tls để tương thích với chứng chỉ tự ký của Kubelet trên các cụm On-Premise/Lab
+echo ">>> Đang cài đặt Metrics Server vào namespace: kube-system..."
+helm upgrade --install metrics-server metrics-server/metrics-server \
+  --namespace kube-system \
+  --create-namespace \
+  --set args={--kubelet-insecure-tls}
 
 echo ""
 echo "==========================================================================="
-echo "  HOAN TAT CAI DAT METRICS SERVER!"
+echo "  CÀI ĐẶT THÀNH CÔNG METRICS SERVER!"
 echo ""
-echo "  Kiem tra trang thai Pods:"
-echo "    kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name=metrics-server"
+echo "  Kiểm tra trạng thái Pod:"
+echo "    kubectl get pods -n kube-system -l app.kubernetes.io/name=metrics-server"
 echo ""
-echo "  Kiem tra xem API Metrics da hoat dong chua (co the mat 1-2 phut de scrape du lieu):"
-echo "    kubectl get apiservice v1beta1.metrics.k8s.io"
-echo ""
-echo "  Kiem tra xem lenh top da xem duoc thong tin chua:"
+echo "  Kiểm tra xem Metrics API hoạt động chưa (chờ khoảng 1 phút để scrape dữ liệu):"
 echo "    kubectl top nodes"
 echo "    kubectl top pods -A"
 echo "==========================================================================="

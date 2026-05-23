@@ -67,15 +67,17 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |   |   |       `-- ubuntu/
 |   |   |           `-- README.md
 |   |   |-- kubernetes/
-|   |   |   `-- install/
-|   |   |       `-- ubuntu/
-|   |   |           |-- README.md
-|   |   |           |-- 01-prepare-all-nodes.sh.example
-|   |   |           |-- 02-init-single-master.sh.example
-|   |   |           |-- 03-init-ha-master.sh.example
-|   |   |           |-- 04-join-worker.sh.example
-|   |   |           |-- 05-join-control-plane.sh.example
-|   |   |           `-- 06-reset-cluster.sh.example
+|   |   |   |-- install/
+|   |   |   |   `-- ubuntu/
+|   |   |   |       |-- README.md
+|   |   |   |       |-- 01-prepare-all-nodes.sh.example
+|   |   |   |       |-- 02-init-single-master.sh.example
+|   |   |   |       |-- 03-init-ha-master.sh.example
+|   |   |   |       |-- 04-join-worker.sh.example
+|   |   |   |       |-- 05-join-control-plane.sh.example
+|   |   |   |       `-- 06-reset-cluster.sh.example
+|   |   |   `-- setup-hpa/
+|   |   |       `-- setup-hpa-guide.md
 |   |   `-- nginx/
 |   |       `-- react-spa-port-3000.conf.example
 |   `-- jenkins/
@@ -185,6 +187,7 @@ Tai nguyen dung chung nhu config Nginx, Dockerfile mau, shell snippet, hoac file
 | Ingress Nginx | Ubuntu | Bash script (root) tai chart Ingress Nginx, chinh sua values.yaml sang NodePort 30080/30443 | `templates/shared/ingress-nginx/install/ubuntu/01-prepare-ingress-nginx.sh.example` |
 | Ingress Nginx | Ubuntu | Bash script (devops) tao namespace va cai dat Ingress Nginx Controller qua Helm | `templates/shared/ingress-nginx/install/ubuntu/02-deploy-ingress-nginx.sh.example` |
 | Metrics Server | Kubernetes | Huong dan va bash script (Helm) cai dat Metrics Server, ho tro cau hinh bo qua TLS tu ky | `templates/shared/metrics-server/README.md` |
+| Kubernetes | HPA Setup | Huong dan chi tiet cai dat Metrics Server, cach sua loi tren Rancher va cau hinh HPA | `templates/shared/kubernetes/setup-hpa/setup-hpa-guide.md` |
 | Nginx | Load Balancer | Nginx config phan phoi traffic den cac K8s node qua NodePort 30080 (dung cho on-premise) | `templates/kubernetes/load-balancer/nginx/k8s-loadbalancer.conf` |
 | Kubernetes | Ingress | Cau hinh Ingress Nginx cho du an car-serv (on-premise, domain h1eudayne.tech) | `templates/kubernetes/ingress/ingress-car-serv.yml.example` |
 | Kubernetes | Full-Stack | Template gom Deployment (RollingUpdate) + Service (ClusterIP) + Ingress (Nginx) trong 1 file, deploy nhanh ung dung web hoan chinh | `templates/kubernetes/full-stack/fullstack-rolling-clusterip-ingress.yml.example` |
