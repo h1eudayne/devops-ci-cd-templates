@@ -114,7 +114,7 @@ shared:
   - id: shared-k8s-hpa-setup-guide
     category: kubernetes
     platform: ubuntu
-    file: templates/shared/kubernetes/setup-hpa/setup-hpa-guide.md
+    file: setup/setup-hpa-guide.md
     maturity: draft
     notes: >
       Huong dan chi tiet cach cai dat Metrics Server, fix loi tren Rancher
