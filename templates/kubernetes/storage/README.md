@@ -2,6 +2,14 @@
 
 Thư mục này chứa các template và hướng dẫn cấu hình lưu trữ trong Kubernetes, đặc biệt là sử dụng StorageClass với cơ chế cấp phát thủ công (manual provisioning) cho NFS hoặc Local Storage.
 
+> [!IMPORTANT]
+> **Lưu ý quan trọng về thiết kế và sử dụng:**
+> 1. **Tài nguyên Toàn cục (Cluster-scoped):** StorageClass và PersistentVolume (PV) là tài nguyên toàn cục của cluster, **không thuộc về bất kỳ namespace nào** (không khai báo `namespace` trong metadata). Trong khi đó, PersistentVolumeClaim (PVC) là tài nguyên cục bộ và bắt buộc phải nằm chung namespace với Pod sử dụng nó.
+> 2. **Tùy biến cấu trúc thư mục & Tên file:** Bạn hoàn toàn có thể tự do tạo thêm các thư mục con riêng biệt hoặc đổi tên file `.yml` để phù hợp với quy chuẩn đặt tên của dự án/tổ chức của bạn.
+> 3. **Giải pháp cho On-Premise (`no-provisioner`):** Trong môi trường tự vận hành (On-Premise), do không có các API tự động cấp phát ổ đĩa của nhà cung cấp Cloud, chúng ta bắt buộc sử dụng tùy chọn `provisioner: kubernetes.io/no-provisioner`. Điều này đồng nghĩa với việc bạn phải tạo sẵn ổ cứng vật lý và định nghĩa thực thể `PersistentVolume` (PV) thủ công trước khi PVC có thể liên kết (bind).
+> 4. **Sự khác biệt khi chạy trên Cloud:** Trên các môi trường đám mây (như AWS, GCP, Azure), bạn không cần dùng `no-provisioner` và không cần tạo PV thủ công. Bạn chỉ cần điền đúng tên provisioner của nhà cung cấp đám mây (ví dụ: `ebs.csi.aws.com` cho AWS EBS, `pd.csi.storage.gke.io` cho Google Persistent Disk). Khi bạn apply một PVC, hệ thống Cloud sẽ tự động lắng nghe, khởi tạo ổ cứng vật lý tương ứng và tự động tạo PV tương thích để gán trực tiếp vào PVC mà không cần bất kỳ sự can thiệp thủ công nào.
+
+
 ---
 
 ## 1. Các câu lệnh thường dùng

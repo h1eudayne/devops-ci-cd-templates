@@ -1,20 +1,27 @@
 # =============================================================================
 # Template: Kubernetes StorageClass (NFS Storage)
 # -----------------------------------------------------------------------------
-# StorageClass cau hinh cach cap phat storage cho PersistentVolume (PV).
-# Su dung provisioner: kubernetes.io/no-provisioner (manual provisioning)
-# thuong dung cho NFS shares duoc tu tao hoac local storage.
+# Lưu ý quan trọng:
+#   - StorageClass là TÀI NGUYÊN TOÀN CỤC (Cluster-scoped resource), không thuộc
+#     về bất kỳ namespace nào (không cấu hình trường metadata.namespace).
+#   - Đây là giải pháp cho môi trường ON-PREMISE: sử dụng tùy chọn
+#     provisioner: kubernetes.io/no-provisioner (cơ chế manual provisioning)
+#     cho NFS hoặc local storage. Bạn bắt buộc phải tạo PersistentVolume (PV) thủ công.
+#   - Khác biệt với CLOUD: Trên các nền tảng đám mây (AWS, GCP, Azure...), bạn chỉ cần
+#     khai báo đúng provisioner của nhà cung cấp (ví dụ: ebs.csi.aws.com), khi tạo PVC
+#     thì tài nguyên ổ đĩa và PV vật lý sẽ tự động được cấp phát (dynamic provisioning).
 #
-# Huong dan:
-#   1. Copy file nay va doi ten bo .example
-#   2. Apply:
+# Hướng dẫn:
+#   1. Bạn có thể tự do tạo thêm thư mục lưu trữ riêng biệt hoặc đổi tên file tùy ý.
+#   2. Copy file này và đổi tên bỏ đuôi .example
+#   3. Apply:
 #      kubectl apply -f storageclass.yml
-#   3. Kiem tra:
+#   4. Kiểm tra:
 #      kubectl get sc
 #
-# Luu y:
-#   - volumeBindingMode: WaitForFirstConsumer dam bao PV/PVC chi bind
-#     khi co Pod thuc su su dung va duoc len lich (scheduled).
+# Lưu ý:
+#   - volumeBindingMode: WaitForFirstConsumer đảm bảo PV/PVC chỉ bind khi có Pod
+#     thực sự sử dụng và được lên lịch (scheduled) thành công trên node hợp lệ.
 # =============================================================================
 
 apiVersion: storage.k8s.io/v1
