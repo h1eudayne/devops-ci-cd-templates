@@ -1,0 +1,35 @@
+# =============================================================================
+# Template: Kubernetes PersistentVolume (NFS Storage)
+# -----------------------------------------------------------------------------
+# Lưu ý quan trọng:
+#   - PersistentVolume (PV) là TÀI NGUYÊN TOÀN CỤC (Cluster-scoped resource),
+#     không thuộc về bất kỳ namespace nào (không cấu hình metadata.namespace).
+#   - Đây là giải pháp cho môi trường ON-PREMISE sử dụng cơ chế thủ công:
+#     Bạn bắt buộc phải tạo PV này trỏ về NFS Server trước khi PVC có thể bind.
+#
+# Hướng dẫn sử dụng:
+#   1. Sao chép file này và đổi tên bỏ đuôi .example:
+#        cp pv.yml.example pv.yml
+#   2. Cập nhật địa chỉ IP của NFS Server tại trường spec.nfs.server.
+#   3. Thay đổi đường dẫn thư mục chia sẻ tại trường spec.nfs.path nếu khác /data.
+#   4. Áp dụng cấu hình:
+#        kubectl apply -f pv.yml
+#   5. Kiểm tra:
+#        kubectl get pv
+# =============================================================================
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-storage
+  nfs:
+    path: /data
+    server: 192.168.1.115 # CHÚ Ý: Thay đổi thành địa chỉ IP tương ứng của NFS Server của bạn

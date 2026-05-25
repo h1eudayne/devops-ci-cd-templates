@@ -56,12 +56,12 @@ kubectl apply -f storageclass.yml
 ### Bước 2: Tạo PersistentVolume (PV) thủ công
 Do dùng `no-provisioner`, bạn cần khai báo PV thủ công trỏ tới thư mục NFS đã export trên NFS Server.
 
-Ví dụ file `nfs-pv.yml`:
+Sử dụng file template [pv.yml.example](pv.yml.example) (bỏ đuôi `.example`):
 ```yaml
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-pv-example
+  name: nfs-pv
 spec:
   capacity:
     storage: 10Gi
@@ -71,38 +71,39 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs-storage
   nfs:
-    path: /volume1/k8s-share/example
-    server: 192.168.1.100
+    path: /data
+    server: 192.168.1.115
 ```
-*Lưu ý: Thay thế `path` và `server` trỏ đúng cấu hình NFS của bạn.*
+*Lưu ý: Thay thế `path` và `server` trỏ đúng cấu hình NFS thực tế của bạn (ví dụ: `192.168.1.115` và `/data`).*
 
 Apply PV:
 ```bash
-kubectl apply -f nfs-pv.yml
+kubectl apply -f pv.yml
 ```
 
 ### Bước 3: Tạo PersistentVolumeClaim (PVC) trong ứng dụng
 Ứng dụng sẽ yêu cầu dung lượng lưu trữ thông qua PVC.
 
-Ví dụ file `app-pvc.yml`:
+Sử dụng file template [pvc.yml.example](pvc.yml.example) (bỏ đuôi `.example`):
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: app-nfs-pvc
-  namespace: <NAMESPACE>
+  name: nfs-pvc
+  namespace: ecommerce
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: nfs-storage
   resources:
     requests:
-      storage: 10Gi
+      storage: 5Gi
+  storageClassName: nfs-storage
 ```
+*Lưu ý: Thay thế `namespace` và `storage` cho phù hợp với yêu cầu thực tế của ứng dụng.*
 
 Apply PVC:
 ```bash
-kubectl apply -f app-pvc.yml -n <NAMESPACE>
+kubectl apply -f pvc.yml
 ```
 
 ---

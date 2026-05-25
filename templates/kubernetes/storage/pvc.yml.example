@@ -1,0 +1,32 @@
+# =============================================================================
+# Template: Kubernetes PersistentVolumeClaim (NFS Storage)
+# -----------------------------------------------------------------------------
+# Lưu ý quan trọng:
+#   - PersistentVolumeClaim (PVC) là TÀI NGUYÊN CỤC BỘ (Namespace-scoped resource).
+#     Nó bắt buộc phải nằm chung namespace với Pod sử dụng nó.
+#   - Đây là giải pháp yêu cầu cấp phát dung lượng lưu trữ từ StorageClass (nfs-storage)
+#     mà bạn đã cấu hình trước đó.
+#
+# Hướng dẫn sử dụng:
+#   1. Sao chép file này và đổi tên bỏ đuôi .example:
+#        cp pvc.yml.example pvc.yml
+#   2. Cập nhật namespace phù hợp với ứng dụng của bạn (mặc định: ecommerce).
+#   3. Điều chỉnh dung lượng yêu cầu tại trường spec.resources.requests.storage.
+#   4. Áp dụng cấu hình:
+#        kubectl apply -f pvc.yml
+#   5. Kiểm tra:
+#        kubectl get pvc -n ecommerce
+# =============================================================================
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc
+  namespace: ecommerce
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: nfs-storage

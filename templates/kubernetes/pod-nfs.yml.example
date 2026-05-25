@@ -1,0 +1,40 @@
+# =============================================================================
+# Template: Kubernetes Pod (Nginx with NFS Volume Mount)
+# -----------------------------------------------------------------------------
+# Lưu ý quan trọng:
+#   - Pod này sẽ chạy container Nginx và tự động mount thư mục chia sẻ NFS
+#     (thông qua PVC nfs-pvc) vào thư mục phục vụ web tĩnh: /usr/share/nginx/html.
+#   - Hãy chắc chắn rằng PersistentVolume (PV) và PersistentVolumeClaim (PVC)
+#     đã được tạo thành công và đang ở trạng thái "Bound" trước khi tạo Pod này.
+#
+# Hướng dẫn sử dụng:
+#   1. Sao chép file này và đổi tên bỏ đuôi .example:
+#        cp pod-nfs.yml.example pod-nfs.yml
+#   2. Cấu hình đúng namespace (mặc định: ecommerce).
+#   3. Áp dụng cấu hình:
+#        kubectl apply -f pod-nfs.yml
+#   4. Kiểm tra trạng thái Pod:
+#        kubectl get pods -n ecommerce
+#   5. Kiểm tra khả năng mount dữ liệu:
+#        - Tạo một file index.html trên NFS Server (tại thư mục /data).
+#        - Truy cập hoặc curl đến IP của Pod Nginx để xem nội dung hiển thị.
+# =============================================================================
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nfs-nginx
+  namespace: ecommerce
+spec:
+  containers:
+    - image: nginx
+      name: nginx
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: nfs-storage
+  volumes:
+    - name: nfs-storage
+      persistentVolumeClaim:
+        claimName: nfs-pvc

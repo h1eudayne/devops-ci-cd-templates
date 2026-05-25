@@ -156,6 +156,24 @@ shared:
       Bash script tu dong cai dat nfs-common, kiem tra cong ket noi 2049
       va thuc hien mount test tren cac node client.
 
+  - id: shared-k8s-nfs-setup-guide
+    category: kubernetes
+    platform: ubuntu
+    file: setup/setup-nfs-guide.md
+    maturity: draft
+    notes: >
+      Huong dan toan dien ve kien truc, luu do hoat dong va cac buoc trien khai
+      NFS Server, Client, PV, PVC va Pod Mount tren Kubernetes.
+
+  - id: shared-k8s-db-nfs-setup-guide
+    category: kubernetes
+    platform: ubuntu
+    file: setup/setup-db-nfs-guide.md
+    maturity: draft
+    notes: >
+      Huong dan tung buoc trien khai database MariaDB tren K8s, bao gom
+      cau hinh NFS Server, StatefulSet va Service NodePort.
+
 kubernetes:
   - id: k8s-namespace-template
     kind: Namespace
@@ -171,6 +189,30 @@ kubernetes:
     notes: >
       Template tao Pod co resource limits. Thay <APP_NAME>, <NAMESPACE>,
       <DOCKER_IMAGE>, <CONTAINER_PORT> bang gia tri thuc te.
+
+  - id: k8s-pod-nfs-template
+    kind: Pod
+    file: templates/kubernetes/pod-nfs.yml.example
+    maturity: draft
+    notes: >
+      Template tao Pod Nginx mount PersistentVolumeClaim (PVC)
+      su dung NFS Storage.
+
+  - id: k8s-statefulset-mariadb-template
+    kind: StatefulSet
+    file: templates/kubernetes/statefulset/mariadb-statefulset.yml.example
+    maturity: draft
+    notes: >
+      Template tao StatefulSet MariaDB mount PersistentVolumeClaim (PVC)
+      su dung NFS Storage voi fsGroup duoc thiet lap la 65534.
+
+  - id: k8s-service-mariadb-template
+    kind: Service
+    file: templates/kubernetes/service/mariadb-service.yml.example
+    maturity: draft
+    notes: >
+      Template tao Service NodePort cho MariaDB de expose cong 3306
+      ra cong vat ly 31306 tren cac node.
 
   - id: k8s-fullstack-rolling-clusterip-ingress
     kind: Deployment+Service+Ingress
@@ -197,6 +239,22 @@ kubernetes:
     notes: >
       Template cau hinh StorageClass su dung provisioner kubernetes.io/no-provisioner
       cho NFS hoac local storage voi volumeBindingMode WaitForFirstConsumer.
+
+  - id: k8s-pv-nfs-template
+    kind: PersistentVolume
+    file: templates/kubernetes/storage/pv.yml.example
+    maturity: draft
+    notes: >
+      Template cau hinh PersistentVolume (PV) thu cong su dung NFS Storage
+      cho moi truong on-premise.
+
+  - id: k8s-pvc-nfs-template
+    kind: PersistentVolumeClaim
+    file: templates/kubernetes/storage/pvc.yml.example
+    maturity: draft
+    notes: >
+      Template cau hinh PersistentVolumeClaim (PVC) su dung NFS Storage
+      cho cac ung dung trong namespace.
 
 
 
