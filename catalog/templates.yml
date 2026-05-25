@@ -198,5 +198,13 @@ kubernetes:
       Template cau hinh StorageClass su dung provisioner kubernetes.io/no-provisioner
       cho NFS hoac local storage voi volumeBindingMode WaitForFirstConsumer.
 
+  - id: k8s-pv-nfs-template
+    kind: PersistentVolume
+    file: templates/kubernetes/storage/pv.yml.example
+    maturity: draft
+    notes: >
+      Template cau hinh PersistentVolume (PV) thu cong su dung NFS Storage
+      cho moi truong on-premise.
+
 
 
