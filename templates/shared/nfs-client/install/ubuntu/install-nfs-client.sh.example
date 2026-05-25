@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# ==============================================================================
+# install-nfs-client.sh
+# Tự động cài đặt và kiểm tra NFS Client trên các Node Kubernetes
+#
+# Cách dùng:
+#   1. Nhân bản file mẫu: cp install-nfs-client.sh.example install-nfs-client.sh
+#   2. Cập nhật IP của NFS Server vào biến NFS_SERVER_IP bên dưới.
+#   3. Cấp quyền chạy: chmod +x install-nfs-client.sh
+#   4. Chạy với sudo: sudo ./install-nfs-client.sh
+# ==============================================================================
+
+set -euo pipefail
+
+# ------------------------------------------------------------------------------
+# Biến cấu hình (Tùy chỉnh để chạy kiểm tra kết nối tự động)
+# ------------------------------------------------------------------------------
+NFS_SERVER_IP=""            # Nhập IP của NFS Server (Ví dụ: "10.0.0.10") để tự động kiểm tra kết nối
+NFS_SHARE_DIR="/data"       # Thư mục chia sẻ trên NFS Server
+TEST_MOUNT="true"           # Tự động mount thử để kiểm tra phân quyền đọc/ghi khi có IP Server
+
+# ==============================================================================
+# 1. Cập nhật và cài đặt gói NFS Client
+# ==============================================================================
+echo ">>> [1/4] Cập nhật danh sách gói và cài đặt nfs-common ..."
+sudo apt-get update -y
+sudo apt-get install -y nfs-common
+
+# ==============================================================================
+# 2. Xác minh gói cài đặt thành công
+# ==============================================================================
+echo ">>> [2/4] Xác minh phiên bản NFS Client cài đặt ..."
+if mount.nfs -V &>/dev/null; then
+    echo "  Đã cài đặt thành công tiện ích NFS Client."
+    mount.nfs -V
+else
+    echo "  LỖI: Gói nfs-common cài đặt không thành công hoặc lệnh mount.nfs không tồn tại!"
+    exit 1
+fi
+echo ""
+
+# ==============================================================================
+# 3. Kiểm tra kết nối mạng tới NFS Server
+# ==============================================================================
+if [ -n "${NFS_SERVER_IP}" ]; then
+    echo ">>> [3/4] Kiểm tra kết nối mạng tới NFS Server (${NFS_SERVER_IP}) ..."
+    
+    # Kiểm tra cổng 2049 bằng netcat nếu có sẵn
+    if command -v nc &>/dev/null; then
+        if nc -z -w 5 "${NFS_SERVER_IP}" 2049 &>/dev/null; then
+            echo "  Kết nối tới cổng 2049 trên NFS Server thành công."
+        else
+            echo "  CANH BÁO: Không thể kết nối tới cổng 2049 trên NFS Server (${NFS_SERVER_IP})!"
+            echo "  Vui lòng kiểm tra lại cấu hình tường lửa (UFW/Firewall) trên NFS Server."
+            TEST_MOUNT="false"
+        fi
+    else
+        echo "  Bỏ qua bước quét cổng (chưa cài đặt công cụ netcat/nc)."
+    fi
+else
+    echo ">>> [3/4] Bỏ qua kiểm tra kết nối (chưa cấu hình biến NFS_SERVER_IP)."
+    TEST_MOUNT="false"
+fi
+echo ""
+
+# ==============================================================================
+# 4. Thử mount và ghi tệp tin kiểm tra phân quyền
+# ==============================================================================
+if [ "${TEST_MOUNT}" = "true" ] && [ -n "${NFS_SERVER_IP}" ]; then
+    echo ">>> [4/4] Tiến hành mount thử để kiểm tra phân quyền đọc/ghi ..."
+    
+    TEST_DIR="/mnt/nfs_client_test_$(date +%s)"
+    sudo mkdir -p "${TEST_DIR}"
+    
+    # Thử mount phân vùng chia sẻ
+    if sudo mount -t nfs "${NFS_SERVER_IP}:${NFS_SHARE_DIR}" "${TEST_DIR}"; then
+        echo "  Mount phân vùng NFS thành công tại ${TEST_DIR}."
+        
+        # Thử ghi file kiểm tra
+        TEST_FILE="${TEST_DIR}/client_write_test_from_$(hostname).txt"
+        if echo "Connection test from $(hostname) at $(date)" | sudo tee "${TEST_FILE}" >/dev/null; then
+            echo "  Kiểm tra ghi tệp tin lên NFS Server: THÀNH CÔNG."
+            sudo rm -f "${TEST_FILE}"
+        else
+            echo "  LỖI: Mount thành công nhưng không thể ghi tệp tin (Kiểm tra lại chmod/chown trên NFS Server)."
+        fi
+        
+        # Gỡ mount và dọn dẹp thư mục tạm
+        sudo umount "${TEST_DIR}"
+        sudo rmdir "${TEST_DIR}"
+    else
+        echo "  LỖI: Không thể mount phân vùng ${NFS_SERVER_IP}:${NFS_SHARE_DIR}!"
+        sudo rmdir "${TEST_DIR}"
+    fi
+else
+    echo ">>> [4/4] Bỏ qua bước kiểm tra mount thực tế."
+fi
+
+echo ""
+echo "==========================================================================="
+echo "  HOÀN THÀNH CÀI ĐẶT NFS CLIENT TRÊN NODE: $(hostname)"
+echo "==========================================================================="
+echo "  Mọi cấu hình cài đặt nfs-common đã sẵn sàng."
+echo "  Node đã đủ điều kiện để mount Persistent Volume từ Kubernetes StorageClass."
+echo "==========================================================================="

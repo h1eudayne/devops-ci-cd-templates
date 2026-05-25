@@ -181,6 +181,8 @@ Tai nguyen dung chung nhu config Nginx, Dockerfile mau, shell snippet, hoac file
 | MySQL | Ubuntu | Huong dan cai `mysql-server`, chay `mysql_secure_installation`, tao database va user ung dung | `templates/shared/mysql/install/ubuntu/README.md` |
 | NFS Server | Ubuntu | Huong dan chi tiet cai dat, cau hinh va mo port cho NFS Server tren Ubuntu | `templates/shared/nfs-server/install/ubuntu/README.md` |
 | NFS Server | Ubuntu | Bash script tu dong hoa cai dat nfs-kernel-server va tao thu muc chia se tren Ubuntu | `templates/shared/nfs-server/install/ubuntu/install-nfs-server.sh.example` |
+| NFS Client | Ubuntu | Huong dan chi tiet cai dat nfs-common va kiem tra ket noi den NFS Server | `templates/shared/nfs-client/install/ubuntu/README.md` |
+| NFS Client | Ubuntu | Bash script tu dong hoa cai dat nfs-common va kiem tra ket noi cong 2049 tren client nodes | `templates/shared/nfs-client/install/ubuntu/install-nfs-client.sh.example` |
 | Nginx | React SPA | Nginx config mau cho React SPA chay tren port 3000 | `templates/shared/nginx/react-spa-port-3000.conf.example` |
 | Kubernetes | Ubuntu | Bash script chuan bi tat ca node K8s: hosts, swap, kernel module, containerd, kubeadm v1.30 | `templates/shared/kubernetes/install/ubuntu/01-prepare-all-nodes.sh.example` |
 | Kubernetes | Ubuntu | Khoi tao cum K8s mo hinh 1 master + 2 worker voi Calico CNI | `templates/shared/kubernetes/install/ubuntu/02-init-single-master.sh.example` |

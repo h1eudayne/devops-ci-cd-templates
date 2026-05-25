@@ -138,6 +138,24 @@ shared:
       Bash script tu dong cai dat nfs-kernel-server, khoi tao thu muc chia se
       va cau hinh firewall UFW tren Ubuntu.
 
+  - id: shared-nfs-client-readme
+    category: storage
+    platform: ubuntu
+    file: templates/shared/nfs-client/install/ubuntu/README.md
+    maturity: draft
+    notes: >
+      Huong dan chi tiet cach cai dat va kiem tra ket noi NFS Client
+      tren cac node Kubernetes (Ubuntu).
+
+  - id: shared-nfs-client-install
+    category: storage
+    platform: ubuntu
+    file: templates/shared/nfs-client/install/ubuntu/install-nfs-client.sh.example
+    maturity: draft
+    notes: >
+      Bash script tu dong cai dat nfs-common, kiem tra cong ket noi 2049
+      va thuc hien mount test tren cac node client.
+
 kubernetes:
   - id: k8s-namespace-template
     kind: Namespace
