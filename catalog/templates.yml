@@ -264,5 +264,13 @@ kubernetes:
       Template cau hinh PersistentVolumeClaim (PVC) su dung NFS Storage
       cho cac ung dung trong namespace.
 
+  - id: k8s-redis-pv-pvc-template
+    kind: PersistentVolume+PersistentVolumeClaim
+    file: templates/kubernetes/storage/redis-pv-pvc.yml.example
+    maturity: draft
+    notes: >
+      Template cau hinh PersistentVolume (PV) va PersistentVolumeClaim (PVC)
+      su dung NFS Storage cho ung dung Redis trong namespace architecture.
+
 
 

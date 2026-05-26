@@ -116,6 +116,9 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |       |   `-- hpa.yml.example
 |       |-- storage/
 |       |   |-- README.md
+|       |   |-- pv.yml.example
+|       |   |-- pvc.yml.example
+|       |   |-- redis-pv-pvc.yml.example
 |       |   `-- storageclass.yml.example
 |       |-- full-stack/
 |       |   |-- README.md
@@ -208,6 +211,9 @@ Tai nguyen dung chung nhu config Nginx, Dockerfile mau, shell snippet, hoac file
 | Kubernetes | Full-Stack | Template gom Deployment (RollingUpdate) + Service (ClusterIP) + Ingress (Nginx) trong 1 file, deploy nhanh ung dung web hoan chinh | `templates/kubernetes/full-stack/fullstack-rolling-clusterip-ingress.yml.example` |
 | Kubernetes | HPA | Template HorizontalPodAutoscaler (HPA) autoscaling/v2 tu dong co gian pod theo CPU va Memory | `templates/kubernetes/hpa/hpa.yml.example` |
 | Kubernetes | Storage | Template StorageClass (nfs-storage) su dung no-provisioner va volumeBindingMode WaitForFirstConsumer | `templates/kubernetes/storage/storageclass.yml.example` |
+| Kubernetes | Storage | Template PersistentVolume (PV) thu cong su dung NFS Storage cho moi truong on-premise | `templates/kubernetes/storage/pv.yml.example` |
+| Kubernetes | Storage | Template PersistentVolumeClaim (PVC) su dung NFS Storage cho cac ung dung | `templates/kubernetes/storage/pvc.yml.example` |
+| Kubernetes | Storage | Template PV va PVC su dung NFS Storage cho Redis trong namespace architecture | `templates/kubernetes/storage/redis-pv-pvc.yml.example` |
 
 
 ## Goi y mo rong tiep theo
