@@ -182,6 +182,15 @@ shared:
     notes: >
       Quy trinh nap du lieu SQL qua NFS va ket noi Backend qua ClusterIP (Phuong phap toi uu).
 
+  - id: shared-k8s-redis-sentinel-setup-guide
+    category: kubernetes
+    platform: ubuntu
+    file: setup/setup-redis-sentinel-guide.md
+    maturity: draft
+    notes: >
+      Huong dan tung buoc trien khai Redis Sentinel HA tren K8s, bao gom
+      cau hinh NFS Server, PV/PVC, Helm values va kiem tra ket noi qua ClusterIP.
+
 kubernetes:
   - id: k8s-namespace-template
     kind: Namespace
@@ -263,6 +272,22 @@ kubernetes:
     notes: >
       Template cau hinh PersistentVolumeClaim (PVC) su dung NFS Storage
       cho cac ung dung trong namespace.
+
+  - id: k8s-redis-pv-pvc-template
+    kind: PersistentVolume+PersistentVolumeClaim
+    file: templates/kubernetes/storage/redis-pv-pvc.yml.example
+    maturity: draft
+    notes: >
+      Template cau hinh PersistentVolume (PV) va PersistentVolumeClaim (PVC)
+      su dung NFS Storage cho ung dung Redis trong namespace architecture.
+
+  - id: k8s-redis-helm-values-template
+    kind: HelmValues
+    file: templates/kubernetes/redis/values.yml.example
+    maturity: draft
+    notes: >
+      Template cau hinh values.yaml de cai dat Redis Replication + Sentinel
+      su dung Helm Chart Bitnami tren Kubernetes.
 
 
 

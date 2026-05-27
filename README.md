@@ -21,7 +21,8 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |-- setup/
 |   |-- setup-db-nfs-guide.md
 |   |-- setup-hpa-guide.md
-|   `-- setup-nfs-guide.md
+|   |-- setup-nfs-guide.md
+|   `-- setup-redis-sentinel-guide.md
 |-- workflow/
 |   `-- kubernetes/
 |       `-- k8s-mariadb-nfs-import.md
@@ -114,8 +115,14 @@ Repository nay dung de luu va tai su dung cac file CI/CD da duoc chuan hoa cho n
 |       |-- hpa/
 |       |   |-- README.md
 |       |   `-- hpa.yml.example
+|       |-- redis/
+|       |   |-- README.md
+|       |   `-- values.yml.example
 |       |-- storage/
 |       |   |-- README.md
+|       |   |-- pv.yml.example
+|       |   |-- pvc.yml.example
+|       |   |-- redis-pv-pvc.yml.example
 |       |   `-- storageclass.yml.example
 |       |-- full-stack/
 |       |   |-- README.md
@@ -202,12 +209,18 @@ Tai nguyen dung chung nhu config Nginx, Dockerfile mau, shell snippet, hoac file
 | Kubernetes | HPA Setup | Huong dan chi tiet cai dat Metrics Server, cach sua loi tren Rancher va cau hinh HPA | `setup/setup-hpa-guide.md` |
 | Kubernetes | NFS Setup | Huong dan toan dien ve kien truc, luu do hoat dong va cac buoc trien khai NFS tren K8s | `setup/setup-nfs-guide.md` |
 | Kubernetes | DB NFS Setup | Huong dan tung buoc trien khai database MariaDB tren K8s qua StatefulSet va NFS | `setup/setup-db-nfs-guide.md` |
+| Kubernetes | Redis Sentinel Setup | Huong dan tung buoc trien khai Redis Sentinel HA tren K8s, bao gom NFS, PV/PVC va Helm values | `setup/setup-redis-sentinel-guide.md` |
 | Kubernetes | DB NFS Workflow | Quy trinh nap du lieu SQL qua NFS va ket noi Backend qua ClusterIP (Phuong phap toi uu) | `workflow/kubernetes/k8s-mariadb-nfs-import.md` |
 | Nginx | Load Balancer | Nginx config phan phoi traffic den cac K8s node qua NodePort 30080 (dung cho on-premise) | `templates/kubernetes/load-balancer/nginx/k8s-loadbalancer.conf` |
 | Kubernetes | Ingress | Cau hinh Ingress Nginx cho du an car-serv (on-premise, domain h1eudayne.tech) | `templates/kubernetes/ingress/ingress-car-serv.yml.example` |
 | Kubernetes | Full-Stack | Template gom Deployment (RollingUpdate) + Service (ClusterIP) + Ingress (Nginx) trong 1 file, deploy nhanh ung dung web hoan chinh | `templates/kubernetes/full-stack/fullstack-rolling-clusterip-ingress.yml.example` |
 | Kubernetes | HPA | Template HorizontalPodAutoscaler (HPA) autoscaling/v2 tu dong co gian pod theo CPU va Memory | `templates/kubernetes/hpa/hpa.yml.example` |
 | Kubernetes | Storage | Template StorageClass (nfs-storage) su dung no-provisioner va volumeBindingMode WaitForFirstConsumer | `templates/kubernetes/storage/storageclass.yml.example` |
+| Kubernetes | Storage | Template PersistentVolume (PV) thu cong su dung NFS Storage cho moi truong on-premise | `templates/kubernetes/storage/pv.yml.example` |
+| Kubernetes | Storage | Template PersistentVolumeClaim (PVC) su dung NFS Storage cho cac ung dung | `templates/kubernetes/storage/pvc.yml.example` |
+| Kubernetes | Storage | Template PV va PVC su dung NFS Storage cho Redis trong namespace architecture | `templates/kubernetes/storage/redis-pv-pvc.yml.example` |
+| Kubernetes | Redis | Template values.yaml de cai dat Redis Replication + Sentinel bang Helm | `templates/kubernetes/redis/values.yml.example` |
+| Kubernetes | Redis | Huong dan trien khai Redis Cluster (Replication + Sentinel) bang Helm | `templates/kubernetes/redis/README.md` |
 
 
 ## Goi y mo rong tiep theo
