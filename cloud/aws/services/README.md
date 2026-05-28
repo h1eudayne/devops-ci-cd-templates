@@ -256,4 +256,4 @@ EFS la dich vu shared file storage (NFS) cua AWS. EFS cho phep nhieu EC2 instanc
 - Tat ca cac dich vu tren nen duoc cau hinh bang IaC (Terraform, CloudFormation) de dam bao reproducibility.
 - Khong commit AWS Access Key, Secret Key, hoac bat ky thong tin xac thuc nao vao repository.
 - Uu tien su dung IAM Role thay vi Access Key khi co the.
-- Tham khao thu muc `cloud/aws/pipelines/` de xem cac pipeline template tich hop voi cac dich vu nay.
+- Tham khao thu muc `cloud/aws/deploy/` de xem cac deploy template tich hop voi cac dich vu nay.

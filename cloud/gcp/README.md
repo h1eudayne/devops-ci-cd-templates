@@ -8,7 +8,7 @@ Thu muc nay chua cac tai nguyen lien quan den Google Cloud Platform (GCP) cho De
 gcp/
 ├── services/        # 📖 Gioi thieu cac dich vu GCP + huong dan su dung
 │   └── README.md
-├── pipelines/       # 🚀 Pipeline templates deploy len GCP
+├── deploy/          # 🚀 Cau hinh deploy len GCP
 │   └── README.md
 └── README.md        # (file nay)
 ```
@@ -16,7 +16,7 @@ gcp/
 | Folder | Mo ta | Khi nao vao? |
 | --- | --- | --- |
 | `services/` | Giai thich tung dich vu GCP la gi, khi nao dung, cach bat dau | "Toi chua biet GKE/Cloud Run la gi" |
-| `pipelines/` | File pipeline CI/CD de deploy ung dung len GCP | "Toi can file .yml deploy len GKE/Cloud Run" |
+| `deploy/` | Cau hinh va huong dan deploy ung dung len GCP | "Toi can file config deploy len GKE/Cloud Run" |
 
 ## Cac dich vu GCP chinh
 

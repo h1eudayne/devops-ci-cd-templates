@@ -256,4 +256,4 @@ Secret Manager la dich vu quan ly secret cua GCP, cho phep luu tru va truy cap A
 - Tat ca cac dich vu tren nen duoc cau hinh bang IaC (Terraform) de dam bao reproducibility.
 - Khong commit service account key JSON, OAuth token hoac bat ky thong tin xac thuc nao vao repository.
 - Uu tien su dung Workload Identity thay vi export service account key.
-- Tham khao thu muc `cloud/gcp/pipelines/` de xem cac pipeline template tich hop voi cac dich vu nay.
+- Tham khao thu muc `cloud/gcp/deploy/` de xem cac deploy template tich hop voi cac dich vu nay.

@@ -63,7 +63,7 @@ Template cho bo CI/CD native cua GCP:
 ## Cau truc khuyen nghi
 
 ```text
-cloud/gcp/pipelines/
+cloud/gcp/deploy/
   github-actions/
     github-actions-gke-deploy.yml
     github-actions-cloud-run-deploy.yml

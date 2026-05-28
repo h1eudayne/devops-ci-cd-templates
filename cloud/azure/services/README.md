@@ -256,4 +256,4 @@ Azure Front Door la dich vu global load balancer ket hop CDN, WAF va SSL offload
 - Tat ca cac dich vu tren nen duoc cau hinh bang IaC (Terraform, ARM Template, Bicep) de dam bao reproducibility.
 - Khong commit client secret, tenant ID thuc te, subscription ID hoac bat ky thong tin xac thuc nao vao repository.
 - Uu tien su dung Managed Identity thay vi service principal voi client secret.
-- Tham khao thu muc `cloud/azure/pipelines/` de xem cac pipeline template tich hop voi cac dich vu nay.
+- Tham khao thu muc `cloud/azure/deploy/` de xem cac deploy template tich hop voi cac dich vu nay.

@@ -8,15 +8,15 @@ Thu muc nay chua cac tai nguyen DevOps cho cac nha cung cap Cloud (AWS, GCP, Azu
 cloud/
 ├── aws/
 │   ├── services/        # 📖 Dich vu AWS la gi + huong dan
-│   ├── pipelines/       # 🚀 Pipeline deploy len AWS
+│   ├── deploy/          # 🚀 Cau hinh deploy len AWS
 │   └── README.md
 ├── gcp/
 │   ├── services/        # 📖 Dich vu GCP la gi + huong dan
-│   ├── pipelines/       # 🚀 Pipeline deploy len GCP
+│   ├── deploy/          # 🚀 Cau hinh deploy len GCP
 │   └── README.md
 ├── azure/
 │   ├── services/        # 📖 Dich vu Azure la gi + huong dan
-│   ├── pipelines/       # 🚀 Pipeline deploy len Azure
+│   ├── deploy/          # 🚀 Cau hinh deploy len Azure
 │   └── README.md
 └── README.md            # (file nay)
 ```
@@ -26,7 +26,7 @@ cloud/
 | Folder | Mo ta | Khi nao vao? |
 | --- | --- | --- |
 | `services/` | Gioi thieu tung dich vu cloud: no la gi, khi nao dung, cach bat dau | Nguoi moi muon hieu dich vu cloud |
-| `pipelines/` | File pipeline CI/CD thuc te de deploy ung dung len cloud | Can file .yml copy ra dung ngay |
+| `deploy/` | Cau hinh va huong dan deploy ung dung len cloud | Can file config/template deploy len cloud |
 
 ## So sanh voi on-premise
 

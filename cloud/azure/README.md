@@ -8,7 +8,7 @@ Thu muc nay chua cac tai nguyen lien quan den Microsoft Azure cho DevOps.
 azure/
 ├── services/        # 📖 Gioi thieu cac dich vu Azure + huong dan su dung
 │   └── README.md
-├── pipelines/       # 🚀 Pipeline templates deploy len Azure
+├── deploy/          # 🚀 Cau hinh deploy len Azure
 │   └── README.md
 └── README.md        # (file nay)
 ```
@@ -16,7 +16,7 @@ azure/
 | Folder | Mo ta | Khi nao vao? |
 | --- | --- | --- |
 | `services/` | Giai thich tung dich vu Azure la gi, khi nao dung, cach bat dau | "Toi chua biet AKS/ACR la gi" |
-| `pipelines/` | File pipeline CI/CD de deploy ung dung len Azure | "Toi can file .yml deploy len AKS/ACR" |
+| `deploy/` | Cau hinh va huong dan deploy ung dung len Azure | "Toi can file config deploy len AKS/ACR" |
 
 ## Cac dich vu Azure chinh
 

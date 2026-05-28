@@ -63,7 +63,7 @@ Template cho dich vu CI/CD native cua Azure:
 ## Cau truc khuyen nghi
 
 ```text
-cloud/azure/pipelines/
+cloud/azure/deploy/
   github-actions/
     github-actions-aks-deploy.yml
     github-actions-acr-push.yml

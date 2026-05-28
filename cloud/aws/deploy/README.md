@@ -61,7 +61,7 @@ Template cho bo CI/CD native cua AWS:
 ## Cau truc khuyen nghi
 
 ```text
-cloud/aws/pipelines/
+cloud/aws/deploy/
   github-actions/
     github-actions-eks-deploy.yml
     github-actions-ecs-deploy.yml

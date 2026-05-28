@@ -8,7 +8,7 @@ Thu muc nay chua cac tai nguyen lien quan den Amazon Web Services (AWS) cho DevO
 aws/
 ├── services/        # 📖 Gioi thieu cac dich vu AWS + huong dan su dung
 │   └── README.md
-├── pipelines/       # 🚀 Pipeline templates deploy len AWS
+├── deploy/          # 🚀 Cau hinh deploy len AWS
 │   └── README.md
 └── README.md        # (file nay)
 ```
@@ -16,7 +16,7 @@ aws/
 | Folder | Mo ta | Khi nao vao? |
 | --- | --- | --- |
 | `services/` | Giai thich tung dich vu AWS la gi, khi nao dung, cach bat dau | "Toi chua biet EKS/ECS/ECR la gi" |
-| `pipelines/` | File pipeline CI/CD de deploy ung dung len AWS | "Toi can file .yml deploy len EKS/ECR" |
+| `deploy/` | Cau hinh va huong dan deploy ung dung len AWS | "Toi can file config deploy len EKS/ECR" |
 
 ## Cac dich vu AWS chinh
 
