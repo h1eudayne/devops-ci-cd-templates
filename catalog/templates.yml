@@ -304,6 +304,14 @@ kubernetes:
     notes: >
       Template cau hinh values.yaml de cai dat Uptime Kuma su dung existingClaim PVC.
 
+  - id: k8s-uptime-kuma-ingress-template
+    kind: Ingress
+    file: on-premise/kubernetes/uptime-kuma/ingress.yml.example
+    maturity: draft
+    notes: >
+      Template cau hinh Ingress cho Uptime Kuma truy cap qua ten mien uptime.devops.hieuduyne.tech.
+
+
 
 
 

@@ -1,34 +1,18 @@
 # Hướng dẫn Triển khai Uptime Kuma bằng Helm trên Kubernetes
 
-Tài liệu này hướng dẫn chi tiết các bước cấu hình và triển khai **Uptime Kuma** (công cụ giám sát trạng thái dịch vụ self-hosted) sử dụng Helm Chart kết hợp với hệ thống lưu trữ **NFS Storage (PV & PVC)** đã cấu hình trước đó trong namespace `monitoring`.
+Tài liệu này hướng dẫn chi tiết các bước cấu hình, triển khai và sửa lỗi phân giải tên miền đối với **Uptime Kuma** (công cụ giám sát trạng thái dịch vụ self-hosted) sử dụng Helm Chart kết hợp với hệ thống lưu trữ **NFS Storage (PV & PVC)** và **Ingress** trong namespace `monitoring`.
 
 ---
 
-## 1. Sơ đồ Kiến trúc Hoạt động
+## Các bước thiết lập Uptime Kuma
 
-Dưới đây là luồng hoạt động của hệ thống lưu trữ Uptime Kuma:
-
-```text
-       [ Người dùng / Quản trị viên ]
-                    │
-                    ▼ (Kết nối Web UI)
-         [ Uptime Kuma Service / Ingress ]
-                    │
-                    ▼ (Lưu cơ sở dữ liệu SQLite)
-      [ PVC: uptime-kuma-pvc (5Gi) ]
-                    │
-        [ PV: uptime-kuma-pv (NFS) ]
-                    │
-  [ NFS Server Share: /data/monitoring ]
-```
+Dưới đây là quy trình 4 bước chuẩn để đưa Uptime Kuma vào vận hành thực tế.
 
 ---
 
-## 2. Quy trình Triển khai Chi tiết
+### BƯỚC 1: Tạo PV và PVC Uptime Kuma
 
-Quá trình này có thể được thực hiện trực tiếp trên máy chủ **k8s-master-1** hoặc thông qua **kubectl shell trên giao diện Rancher**.
-
-### BƯỚC 1: Khởi tạo môi trường & Cấp phát ổ đĩa (PV & PVC)
+PersistentVolume (PV) và PersistentVolumeClaim (PVC) đảm bảo dữ liệu cấu hình giám sát của Uptime Kuma không bị mất đi khi Pod bị khởi động lại.
 
 1. **Khởi tạo Namespace `monitoring`** (nếu chưa có):
    ```bash
@@ -36,77 +20,127 @@ Quá trình này có thể được thực hiện trực tiếp trên máy chủ
    ```
 
 2. **Cấu hình lưu trữ vật lý trên NFS Server** (Thực hiện trên máy chủ NFS):
-   Tạo thư mục chia sẻ cho giám sát và phân quyền ghi đọc đầy đủ để tránh lỗi Permission Denied từ Pod:
    ```bash
    sudo mkdir -p /data/monitoring
    sudo chown -R nobody:nogroup /data/
    sudo chmod -R 777 /data
    ```
 
-3. **Áp dụng cấu hình PV & PVC cho Uptime Kuma**:
-   Đảm bảo tệp `uptime-kuma-pv-pvc.yml` đã được cập nhật đúng địa chỉ IP của NFS Server, sau đó triển khai:
+3. **Áp dụng cấu hình PV & PVC**:
+   Sử dụng file manifest [uptime-kuma-pv-pvc.yml](../storage/uptime-kuma-pv-pvc.yml) đã được cấu hình IP của NFS Server:
    ```bash
-   kubectl apply -f on-premise/kubernetes/storage/uptime-kuma-pv-pvc.yml -n monitoring
+   kubectl apply -f on-premise/kubernetes/storage/uptime-kuma-pv-pvc.yml
    ```
 
-4. **Kiểm tra trạng thái liên kết đĩa (PVC)**:
-   Bạn có thể đăng nhập giao diện **Rancher** để xem PVC `uptime-kuma-pvc` đã chuyển sang trạng thái **`Bound`** hay chưa, hoặc kiểm tra bằng CLI:
+4. **Kiểm tra trạng thái**:
+   Đảm bảo PVC `uptime-kuma-pvc` đã ở trạng thái `Bound`:
    ```bash
    kubectl get pvc uptime-kuma-pvc -n monitoring
    ```
 
 ---
 
-### BƯỚC 2: Tạo thư mục làm việc & Chuẩn bị cấu hình
+### BƯỚC 2: Add Repo, Setup Values và Cài đặt Uptime Kuma
 
-1. **Tạo thư mục làm việc trên K8S Master**:
-   ```bash
-   mkdir -p uptime-kuma
-   cd uptime-kuma
-   ```
+Sử dụng Helm Chart để cài đặt nhanh chóng và đồng bộ cấu hình lưu trữ qua tệp `values.yaml`.
 
-2. **Khởi tạo file cấu hình `values.yaml`**:
-   Sao chép tệp mẫu `values.yml.example` sang `values.yaml` trong thư mục làm việc của bạn:
-   ```bash
-   cp on-premise/kubernetes/uptime-kuma/values.yml.example values.yaml
-   ```
-
-3. **Thêm kho lưu trữ Uptime Kuma Helm & Cập nhật**:
+1. **Thêm Helm Repository**:
    ```bash
    helm repo add uptime-kuma https://dirsigler.github.io/uptime-kuma-helm
    helm repo update
    ```
 
+2. **Chuẩn bị tệp `values.yaml`**:
+   Sử dụng tệp mẫu cấu hình sẵn [values.yml.example](values.yml.example) để ánh xạ vào PVC đã tạo ở Bước 1:
+   ```yaml
+   volume:
+     enabled: true
+     accessMode: ReadWriteOnce
+     existingClaim: "uptime-kuma-pvc"
+   ```
+
+3. **Tiến hành cài đặt**:
+   ```bash
+   helm install uptime-kuma uptime-kuma/uptime-kuma --values values.yaml --namespace monitoring
+   ```
+
+4. **Kiểm tra trạng thái hoạt động**:
+   ```bash
+   kubectl get pods -n monitoring -l app.kubernetes.io/name=uptime-kuma
+   ```
+
 ---
 
-### BƯỚC 3: Cài đặt Uptime Kuma bằng Helm
+### BƯỚC 3: Tạo Ingress cấu hình Domain
 
-Thực hiện lệnh cài đặt với tệp cấu hình `values.yaml` trong namespace `monitoring`:
+Để truy cập Web UI của Uptime Kuma từ bên ngoài thông qua tên miền `uptime.devops.hieuduyne.tech`, ta cấu hình Ingress sử dụng Ingress Nginx Controller.
 
-```bash
-helm install uptime-kuma uptime-kuma/uptime-kuma --values values.yaml --namespace monitoring
-```
+1. **Áp dụng file cấu hình Ingress**:
+   Sử dụng tệp [ingress.yml](ingress.yml) đã tạo:
+   ```bash
+   kubectl apply -f on-premise/kubernetes/uptime-kuma/ingress.yml
+   ```
 
-> [!NOTE]
-> Nếu bạn muốn nâng cấp hoặc cập nhật cấu hình trong tương lai, chỉ cần chỉnh sửa `values.yaml` và chạy lệnh:
-> `helm upgrade uptime-kuma uptime-kuma/uptime-kuma --values values.yaml --namespace monitoring`
+2. **Nội dung cấu hình Ingress**:
+   ```yaml
+   apiVersion: networking.k8s.io/v1
+   kind: Ingress
+   metadata:
+     name: uptime-ingress
+     namespace: monitoring
+   spec:
+     ingressClassName: nginx
+     rules:
+       - host: uptime.devops.hieuduyne.tech
+         http:
+           paths:
+             - backend:
+                 service:
+                   name: uptime-kuma
+                   port:
+                     number: 3001
+               path: /
+               pathType: Prefix
+   ```
+
+3. **Kiểm tra trạng thái**:
+   ```bash
+   kubectl get ingress -n monitoring uptime-ingress
+   ```
 
 ---
 
-## 3. Các lệnh kiểm tra vận hành và giám sát
+### BƯỚC 4: Sửa lỗi phân giải tên miền (Fix bug add host domain)
 
-Sau khi triển khai thành công, hãy thực hiện các bước sau để đảm bảo Uptime Kuma hoạt động ổn định:
+Khi chạy trong mạng nội bộ Kubernetes (On-premise), Pod Uptime Kuma hoặc các dịch vụ khác có thể không phân giải được chính xác tên miền `uptime.devops.hieuduyne.tech` do chưa có DNS công khai hoặc DNS nội bộ chưa đồng bộ.
 
-### 1. Kiểm tra trạng thái các Pods và Services
-```bash
-# Kiểm tra danh sách các Pod (Đợi cho tới khi pod ở trạng thái Running)
-kubectl get pods -n monitoring -l app.kubernetes.io/name=uptime-kuma -w
+Để giải quyết vấn đề này, ta cần thêm cấu hình ánh xạ IP của Node chạy Ingress Nginx (hoặc Load Balancer) trực tiếp vào file `/etc/hosts` của Pod (sử dụng cơ chế `HostAliases`).
 
-# Kiểm tra danh sách Services
-kubectl get svc -n monitoring -l app.kubernetes.io/name=uptime-kuma
+#### Cách 1: Thao tác trực tiếp trên giao diện Rancher UI (Khuyên dùng)
+1. Truy cập **Rancher UI** > Chọn Cluster đang chạy.
+2. Menu bên trái, vào mục **Workloads** > Tìm ứng dụng `uptime-kuma` (hoặc `kuma-uptime`).
+3. Click vào dấu 3 chấm góc phải > Chọn **Edit Config**.
+4. Di chuyển xuống phần cấu hình **Pod** > Mở tab **Networking**.
+5. Tìm mục **Add Alias** (Host Aliases).
+6. Nhập thông tin ánh xạ:
+   - **IP**: Địa chỉ IP của máy chủ chạy Ingress Controller hoặc Nginx Load Balancer (Ví dụ: `192.168.1.115`).
+   - **Hostnames**: `uptime.devops.hieuduyne.tech`
+7. Click **Save** để áp dụng. Pod sẽ tự động restart và nhận cấu hình mới.
+
+#### Cách 2: Cấu hình trực tiếp bằng YAML Manifest (HostAliases)
+Nếu bạn triển khai bằng YAML hoặc muốn chỉnh sửa thông qua `kubectl edit`, hãy thêm phần `hostAliases` vào dưới trường `spec.template.spec` trong Deployment của Uptime Kuma:
+
+```yaml
+spec:
+  template:
+    spec:
+      hostAliases:
+        - ip: "192.168.1.115" # Điền IP của Ingress Controller / Load Balancer của bạn
+          hostnames:
+            - "uptime.devops.hieuduyne.tech"
 ```
 
-### 2. Xem log của Uptime Kuma để xác nhận hoạt động
+Áp dụng thay đổi để Pod tự động cập nhật file `/etc/hosts` nội bộ:
 ```bash
-kubectl logs deployment/uptime-kuma -n monitoring --tail=100
+kubectl edit deployment uptime-kuma -n monitoring
 ```

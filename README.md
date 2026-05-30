@@ -142,6 +142,7 @@ Phan `scenario` nen mo ta du 4 y:
 | Service | service-nodeport | Service kieu NodePort | `service/service-nodeport.yml.example` |
 | Service | mariadb-service | Service cho MariaDB | `service/mariadb-service.yml.example` |
 | Ingress | ingress-car-serv | Ingress Nginx cho du an car-serv (domain h1eudayne.tech) | `ingress/ingress-car-serv.yml.example` |
+| Ingress | uptime-ingress | Ingress cho Uptime Kuma (domain uptime.devops.hieuduyne.tech) | `uptime-kuma/ingress.yml.example` |
 | ConfigMap | configmap-spring | ConfigMap cho Spring Boot properties | `configmap/configmap-spring-properties.yml.example` |
 | Secret | database | Secret cho database connection | `secret/database/ecommerce-backend-database-connection.yml` |
 | Secret | harbor | Secret cho Harbor registry auth | `secret/harbor/harbor-registry-auth.yml.example` |
