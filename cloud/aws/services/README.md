@@ -26,10 +26,26 @@ Thu muc nay mo ta cac dich vu AWS thuong duoc su dung trong quy trinh DevOps va 
 
 ## 1. EC2 - Elastic Compute Cloud
 
-**Xem chi tiet huong dan hoc tap va so sanh tai day:** [Amazon EC2 Service Document](1. EC2/1. Amazon EC2.md)
+**Danh sach tai lieu hoc tap va huong dan chi tiet:**
+
+### Tai lieu ly thuyet (Theory Documents)
+- [1. Amazon EC2](1. EC2/1. Amazon EC2.md): So sanh cau hinh EC2 voi PC/Laptop vat ly, cac khai niem co ban nhu AMI, Instance Type, EBS.
+- [2. Amazon EC2 Lifecycle](1. EC2/2. Amazon EC2 Lifecycle.md): Vong doi cua EC2 (EBS-backed va Instance Store-backed) voi so do Mermaid va cach tinh phi.
+- [3. Amazon EC2 Security Group](1. EC2/3. Amazon EC2 Security Group.md): Tuong lua ao, co che Stateful, quy tac Inbound/Outbound.
+- [6. Amazon EC2 User Data and Metadata](1. EC2/6. Amazon EC2 User Data and Metadata.md): Chay script tu dong khi khoi tao (User Data) va truy xuat thong tin he thong (Metadata IMDSv2).
+- [8. Amazon EC2 Use Cases](1. EC2/8. Amazon EC2 Use Cases.md): Cac truong hop su dung pho bien nhu Lift & Shift, All-in-One, Compute Cluster, self-managed DB, Kubernetes nodes.
+- [9. Amazon EBS](1. EC2/9. Amazon EBS.md): Chi tiet ve dich vu block storage cho EC2 va cac dong o cung (gp2/gp3, io1/io2, st1, sc1).
+
+### Huong dan thuc hanh (Hands-on Labs)
+- [4. Amazon EC2 Hands-on Lab(Linux)](1. EC2/4. Amazon EC2 Hands-on Lab(Linux).md) (Lien ket den thuc hanh deploy): Khoi tao EC2 Linux, cau hinh SG, sua loi khoa SSH tren Windows, cai dat httpd va tao AMI/Snapshot.
+- [5. Amazon EC2 Hands-on Lab(Windows)](1. EC2/5. Amazon EC2 Hands-on Lab(Windows).md) (Lien ket den thuc hanh deploy): Khoi tao EC2 Windows Server, mo RDP 3389 va giai ma mat khau Administrator.
+- [7. Amazon EC2 User Data and Metadata Lab](1. EC2/7. Amazon EC2 User Data and Metadata Lab.md) (Lien ket den thuc hanh deploy): Su dung User Data de tu dong cai Web Server va lay IP dong qua IMDSv2.
+- [10. Amazon EC2 Hands-on Lab(Windows Volume)](1. EC2/10. Amazon EC2 Hands-on Lab(Windows Volume).md) (Lien ket den thuc hanh deploy): Tao, gan va dinh dang EBS Volume phu tren Windows Server (Disk Management).
+- [11. Amazon EC2 Hands-on Lab(Linux Volume)](1. EC2/11. Amazon EC2 Hands-on Lab(Linux Volume).md) (Lien ket den thuc hanh deploy): Tao, gan, phan vung (fdisk), dinh dang XFS, cau hinh auto-mount (/etc/fstab) va mo rong truc tuyen (growpart, xfs_growfs).
+- [12. Amazon EC2 Hands-on Lab(Add Member SSH)](1. EC2/12. Amazon EC2 Hands-on Lab(Add Member SSH).md) (Lien ket den thuc hanh deploy): Tao user moi, phan quyen thu muc .ssh (700) va authorized_keys (600), cau hinh SSH key cho thanh vien du an.
 
 **No la gi:**
-EC2 la dich vu cung cap server ao (Virtual Machine) theo yeu cau tren ha tang dam may cua AWS. Ban co thay doi linh hoat RAM, CPU, GPU, o cung và he dieu hanh tuy y trong vai phut.
+EC2 la dich vu cung cap server ao (Virtual Machine) theo yeu cau tren ha tang dam may cua AWS. Ban co thay doi linh hoat RAM, CPU, GPU, o cung va he dieu hanh tuy y trong vai phut.
 
 **Khi nao su dung:**
 - Khi can mot server Linux/Windows doc lap de tu cai dat web server, database, app server.
