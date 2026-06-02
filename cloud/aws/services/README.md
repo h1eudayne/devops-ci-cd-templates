@@ -174,6 +174,7 @@ VPC la mang ao rieng tren AWS, cho phep ban dinh nghia dai IP, subnet, route tab
 
 ### Tai lieu ly thuyet (Theory Documents)
 - [1. Amazon IAM](2. IAM/1. Amazon IAM.md): Nhiệm vụ định danh và phân quyền, quản lý ai (who) và cái gì (what) có thể access như thế nào, các use case của IAM (ABAC, Multi-account, Guardrails, Least privilege).
+- [2. Amazon IAM Concept](2. IAM/2. Amazon IAM Concept.md): Các khái niệm cốt lõi của IAM bao gồm User, Group, Role, và Permission (Policy) để đảm bảo tiêu chí về Security.
 
 **No la gi:**
 IAM la dich vu quan ly quyen truy cap tren AWS. IAM cho phep tao user, group, role va policy de kiem soat ai duoc phep lam gi voi tai nguyen AWS. Trong DevOps, IAM role duoc su dung cho EC2 instance, EKS pod (IRSA), Lambda function va CI/CD pipeline.
