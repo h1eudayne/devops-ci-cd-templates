@@ -132,7 +132,7 @@ Phan `scenario` nen mo ta du 4 y:
 ### Kubernetes Manifest Templates
 
 > Tat ca file nam trong `on-premise/kubernetes/`
-> 🗺️ **Lộ trình học tập**: Bạn có thể xem lộ trình học tập Kubernetes 43 bài chi tiết kèm tài nguyên liên kết tại [Lộ Trình Học Tập Kubernetes](on-premise/kubernetes/roadmap/README.md).
+> **Lo trinh hoc tap**: Ban co the xem lo trinh hoc tap Kubernetes 43 bai chi tiet kem tai nguyen lien ket tai [Lo Trinh Hoc Tap Kubernetes](on-premise/kubernetes/roadmap/README.md).
 
 | Nhom | Template | Mo ta | File |
 | --- | --- | --- | --- |

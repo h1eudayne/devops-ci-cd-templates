@@ -1,21 +1,21 @@
-# 🔐 Kiến Trúc Bảo Mật (Security Architecture Design)
+# Kien Truc Bao Mat (Security Architecture Design)
 
-Bảo mật là một yếu tố nền tảng không thể tách rời trong vai trò System Architect. Thiết kế kiến trúc bảo mật tốt sẽ ngăn chặn các nguy cơ tấn công mạng, rò rỉ dữ liệu và đảm bảo tính tuân thủ.
-
----
-
-## 🎯 Các Nguyên Tắc Thiết Kế Bảo Mật
-
-1. **Nguyên tắc Đặc Quyền Tối Thiểu (Least Privilege)**:
-   * Chỉ cấp quyền hạn vừa đủ để thực hiện một tác vụ cụ thể. Không dùng tài khoản Root cho các tác vụ hàng ngày.
-2. **Phòng thủ theo chiều sâu (Defense in Depth)**:
-   * Sử dụng nhiều lớp bảo mật ở các tầng khác nhau: từ Firewall mạng (VPC/Security Group), phân quyền danh tính (IAM), mã hóa dữ liệu (KMS) đến giám sát phát hiện bất thường (CloudTrail, GuardDuty).
-3. **Phân vùng mạng (Network Segmentation)**:
-   * Đặt các máy chủ cơ sở dữ liệu (Database) và xử lý nội bộ vào vùng mạng riêng tư (Private Subnet). Chỉ mở vùng mạng công cộng (Public Subnet) cho Load Balancer hoặc Bastion Host.
+Bao mat la mot yeu to nen tang khong the tach roi trong vai tro System Architect. Thiet ke kien truc bao mat tot se ngan chan cac nguy co tan cong mang, ro ri du lieu va dam bao tinh tuan thu.
 
 ---
 
-## 🗺️ Mô Hình Phân Vùng Mạng (Network Segmentation)
+## Cac Nguyen Tac Thiet Ke Bao Mat
+
+1. **Nguyen tac Dac Quyen Toi Thieu (Least Privilege)**:
+   * Chi cap quyen han vua du de thuc hien mot tac vu cu the. Khong dung tai khoan Root cho cac tac vu hang ngay.
+2. **Phong thu theo chieu sau (Defense in Depth)**:
+   * Su dung nhieu lop bao mat o cac tang khac nhau: tu Firewall mang (VPC/Security Group), phan quyen danh tinh (IAM), ma hoa du lieu (KMS) den giam sat phat hien bat thuong (CloudTrail, GuardDuty).
+3. **Phan vung mang (Network Segmentation)**:
+   * Dat cac may chu co so du lieu (Database) va xu ly noi bo vao vung mang rieng tu (Private Subnet). Chi mo vung mang cong cong (Public Subnet) cho Load Balancer hoac Bastion Host.
+
+---
+
+## Mo Hinh Phan Vung Mang (Network Segmentation)
 
 ```mermaid
 graph TD
@@ -30,18 +30,19 @@ graph TD
         end
         subgraph DatabaseSubnet [Isolated DB Subnet]
             WebApp --> DB[(Database Cluster)]
-            Bastion -->|Admin SSH| WebApp & DB
+            Bastion -->|Admin SSH| WebApp
+            Bastion -->|Admin SSH| DB
         end
     end
 ```
 
 ---
 
-## 🔗 Liên Kết Thực Hành DevOps
-Tham khảo cấu hình bảo mật thực tế cho hạ tầng của bạn:
+## Lien Ket Thuc Hanh DevOps
+Tham khao cau hinh bao mat thuc te cho ha tang cua ban:
 
-*   **AWS IAM (Identity & Access Management)**:
-    * [Tìm hiểu về tài khoản IAM, Group & Role](../../cloud/aws/services/2.%20IAM/2.%20Amazon%20IAM%20Concept.md)
-    * [So sánh IAM Policy và Resource-based Policy](../../cloud/aws/services/2.%20IAM/7.%20Amazon%20IAM%20Policy%20vs%20Resource%20Policy.md)
-    * [Thực hành phân quyền & chặn thao tác bằng Policy](../../cloud/aws/deploy/2.%20IAM/1.%20Amazon%20IAM%20Hands-on%20Lab%28User%2C%20Group%20and%20Policy%29.md)
-*   **Kubernetes Secret Management**: [Thư mục cấu hình Secret mẫu](../../on-premise/kubernetes/secret/)
+*   **AWS IAM (Identity and Access Management)**:
+    * [Tim hieu ve tai khoan IAM, Group va Role](../../cloud/aws/services/2.%20IAM/2.%20Amazon%20IAM%20Concept.md)
+    * [So sanh IAM Policy va Resource-based Policy](../../cloud/aws/services/2.%20IAM/7.%20Amazon%20IAM%20Policy%20vs%20Resource%20Policy.md)
+    * [Thuc hanh phan quyen va chan thao tac bang Policy](../../cloud/aws/deploy/2.%20IAM/1.%20Amazon%20IAM%20Hands-on%20Lab%28User%2C%20Group%20and%20Policy%29.md)
+*   **Kubernetes Secret Management**: [Thu muc cau hinh Secret mau](../../on-premise/kubernetes/secret/)

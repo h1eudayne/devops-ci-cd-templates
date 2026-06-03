@@ -1,33 +1,33 @@
-# 🚀 Thiết Kế Khả Năng Co Giãn (Scaling System Design)
+# Thiet Ke Kha Nang Co Gian (Scaling System Design)
 
-Co giãn (Scaling) là khả năng mở rộng dung lượng của hệ thống để xử lý lượng tải lớn hơn (ví dụ: lượng request tăng đột biến trong các chiến dịch khuyến mãi hoặc lượng người dùng tăng trưởng).
-
----
-
-## 🎯 Phân Loại Chiến Lược Co Giãn
-
-1. **Mở rộng theo chiều dọc (Vertical Scaling - Scale Up)**:
-   * **Nguyên lý**: Tăng thêm tài nguyên phần cứng (CPU, RAM, Disk) cho máy chủ hiện tại.
-   * **Ưu điểm**: Dễ thực hiện, không cần thay đổi kiến trúc code của ứng dụng.
-   * **Nhược điểm**: Có giới hạn vật lý phần cứng và gây Downtime khi nâng cấp.
-
-2. **Mở rộng theo chiều ngang (Horizontal Scaling - Scale Out)**:
-   * **Nguyên lý**: Thêm nhiều máy chủ mới vào cụm chạy song song để chia sẻ tải.
-   * **Ưu điểm**: Không giới hạn năng lực mở rộng, tính sẵn sàng cao.
-   * **Nhược điểm**: Đòi hỏi ứng dụng phải thiết kế không trạng thái (Stateless), cần hệ thống Load Balancer và phức tạp hơn khi đồng bộ dữ liệu.
+Co gian (Scaling) la kha nang mo rong dung luong cua he thong de xu ly luong tai lon hon (vi du: luong request tang dot bien trong cac chien dich khuyen mai hoac luong nguoi dung tang truong).
 
 ---
 
-## 🚀 Các Điểm Mấu Chốt Khi Thiết Kế Hệ Thống Tải Cao
+## Phan Loai Chien Luoc Co Gian
 
-*   **Caching**: Đưa dữ liệu thường xuyên truy xuất lên RAM (sử dụng Redis) để giảm tải trực tiếp cho Database.
-*   **Database Read/Write Splitting**: Định hướng luồng ghi đến Database Master, và phân phối luồng đọc đến các Database Slave để chia sẻ gánh nặng.
-*   **Auto-scaling**: Tự động tăng giảm số lượng ứng dụng dựa trên mức sử dụng CPU/RAM thực tế.
+1. **Mo rong theo chieu doc (Vertical Scaling - Scale Up)**:
+   * **Nguyen ly**: Tang them tai nguyen phan cung (CPU, RAM, Disk) cho may chu hien tai.
+   * **Uu diem**: De thuc hien, khong can thay doi kien truc code cua ung dung.
+   * **Nhuoc diem**: Co gioi han vat ly phan cung va gay Downtime khi nang cap.
+
+2. **Mo rong theo chieu ngang (Horizontal Scaling - Scale Out)**:
+   * **Nguyen ly**: Them nhieu may chu moi vao cum chay song song de chia se tai.
+   * **Uu diem**: Khong gioi han nang luc mo rong, tinh san sang cao.
+   * **Nhuoc diem**: Doi hoi ung dung phai thiet ke khong trang thai (Stateless), can he thong Load Balancer va phuc tap hon khi dong bo du lieu.
 
 ---
 
-## 🔗 Liên Kết Thực Hành DevOps
-Hãy tham khảo cách cấu hình co giãn tự động và caching trực tiếp trong repo này:
+## Cac Diem Mau Chot Khi Thiet Ke He Thong Tai Cao
 
-*   **Auto-scaling**: [Kubernetes Horizontal Pod Autoscaler (HPA)](../../on-premise/kubernetes/hpa/) (Cấu hình tự động scale số lượng Pod dựa theo thông số tải CPU/RAM).
-*   **Caching Layer**: [Cài đặt Redis Sentinel HA Cluster](../../on-premise/kubernetes/redis/) (Sử dụng Helm Chart để deploy cụm Redis chịu tải cao).
+*   **Caching**: Dua du lieu thuong xuyen truy xuat len RAM (su dung Redis) de giam tai truc tiep cho Database.
+*   **Database Read/Write Splitting**: Dinh huong luong ghi den Database Master, va phan phoi luong doc den cac Database Slave de chia se ganh nang.
+*   **Auto-scaling**: Tu dong tang giam so luong ung dung dua tren muc su dung CPU/RAM thuc te.
+
+---
+
+## Lien Ket Thuc Hanh DevOps
+Hay tham khao cach cau hinh co gian tu dong va caching truc tiep trong repo chi tiet:
+
+*   **Auto-scaling**: [Kubernetes Horizontal Pod Autoscaler (HPA)](../../on-premise/kubernetes/hpa/) (Cau hinh tu dong scale so luong Pod dua theo thong so tai CPU/RAM).
+*   **Caching Layer**: [Cai dat Redis Sentinel HA Cluster](../../on-premise/kubernetes/redis/) (Su dung Helm Chart de deploy cum Redis chiu tai cao).
