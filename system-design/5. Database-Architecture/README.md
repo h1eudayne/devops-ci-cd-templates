@@ -1,38 +1,39 @@
-# 🗄️ Kiến Trúc Cơ Sở Dữ Liệu (Database Architecture Design)
+# Kien Truc Co So Du Lieu (Database Architecture Design)
 
-Cơ sở dữ liệu (Database) là trái tim của hệ thống phần mềm và thường là điểm nghẽn cổ chai (Bottleneck) lớn nhất của toàn hệ thống. System Architect cần hiểu cách thiết kế lưu trữ để hệ thống đạt hiệu năng và độ ổn định tối ưu.
-
----
-
-## 🎯 Phân Nhóm Hệ Quản Trị CSDL
-
-1. **CSDL Quan Hệ (Relational Database - SQL)**:
-   * *Đại diện*: MariaDB, MySQL, PostgreSQL.
-   * *Ưu điểm*: Đảm bảo tính nhất quán dữ liệu cao (ACID), hỗ trợ các truy vấn phức tạp (JOIN).
-   * *Phù hợp*: Hệ thống thanh toán, E-commerce, Quản lý tài khoản.
-
-2. **CSDL Phi Quan Hệ (Non-relational Database - NoSQL)**:
-   * *Đại diện*: MongoDB, Redis, Cassandra.
-   * *Ưu điểm*: Ghi dữ liệu tốc độ cực nhanh, lưu trữ dữ liệu dạng Key-Value, Document hoặc Graph linh hoạt, dễ dàng Scale ngang.
-   * *Phù hợp*: Hệ thống cache, log collector, chat thời gian thực.
+Co so du lieu (Database) la trai tim cua he thong phan mem va thuong la diem nghen co chai (Bottleneck) lon nhat cua toan he thong. System Architect can hieu cach thiet ke luu tru de he thong dat hieu nang va do on dinh toi uu.
 
 ---
 
-## 🗺️ Mô Hình Đồng Bộ Dữ Liệu (Master-Slave Replication)
+## Phan Nhom He Quan Tri CSDL
+
+1. **CSDL Quan He (Relational Database - SQL)**:
+   * *Dai dien*: MariaDB, MySQL, PostgreSQL.
+   * *Uu diem*: Dam bao tinh nhat quan du lieu cao (ACID), ho tro cac truy van phuc tap (JOIN).
+   * *Phu hop*: He thong thanh toan, E-commerce, Quan ly tai khoan.
+
+2. **CSDL Phi Quan He (Non-relational Database - NoSQL)**:
+   * *Dai dien*: MongoDB, Redis, Cassandra.
+   * *Uu diem*: Ghi du lieu toc do cuc nhanh, luu tru du lieu dang Key-Value, Document hoac Graph linh hoat, de dang Scale ngang.
+   * *Phu hop*: He thong cache, log collector, chat thoi gian thuc.
+
+---
+
+## Mo Hinh Dong Bo Du Lieu (Master-Slave Replication)
 
 ```mermaid
 graph LR
-    Client -->|Ghi dữ liệu| Master[Database Master Node]
-    Client -->|Đọc dữ liệu| Slave1[Database Slave Node 1]
-    Client -->|Đọc dữ liệu| Slave2[Database Slave Node 2]
-    Master -->|Đồng bộ dữ liệu - Replication| Slave1 & Slave2
+    Client -->|Ghi du lieu| Master[Database Master Node]
+    Client -->|Doc du lieu| Slave1[Database Slave Node 1]
+    Client -->|Doc du lieu| Slave2[Database Slave Node 2]
+    Master -->|Dong bo du lieu - Replication| Slave1
+    Master -->|Dong bo du lieu - Replication| Slave2
 ```
 
 ---
 
-## 🔗 Liên Kết Thực Hành DevOps
-Tham khảo cách triển khai lưu trữ dữ liệu bền vững và thiết lập Database Cluster trong cụm Kubernetes của bạn:
+## Lien Ket Thuc Hanh DevOps
+Tham khao cach trien khai luu tru du lieu ben vung va thiet lap Database Cluster trong cum Kubernetes cua ban:
 
-*   **Database StatefulSet**: [MariaDB Statefulset Manifest](../../on-premise/kubernetes/statefulset/) (Triển khai ứng dụng Stateful có gắn Volume lưu trữ).
-*   **Storage & PV/PVC**: [Persistent Volume (PV) và Persistent Volume Claim (PVC)](../../on-premise/kubernetes/storage/) (Giải pháp gắn vùng lưu trữ NFS dùng chung cho Pod).
-*   **NoSQL / Caching**: [Redis Sentinel Deployment](../../on-premise/kubernetes/redis/) (Sử dụng Redis làm tầng đệm lưu trữ dữ liệu truy xuất nhanh).
+*   **Database StatefulSet**: [MariaDB Statefulset Manifest](../../on-premise/kubernetes/statefulset/) (Trien khai ung dung Stateful co gan Volume luu tru).
+*   **Storage and PV/PVC**: [Persistent Volume (PV) va Persistent Volume Claim (PVC)](../../on-premise/kubernetes/storage/) (Giai phap gan vung luu tru NFS dung chung cho Pod).
+*   **NoSQL / Caching**: [Redis Sentinel Deployment](../../on-premise/kubernetes/redis/) (Su dung Redis lam tang dem luu tru du lieu truy xuat nhanh).

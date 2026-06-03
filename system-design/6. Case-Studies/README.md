@@ -1,39 +1,39 @@
-# 📁 Các Case Studies Thực Tế (System Design Case Studies)
+# Cac Case Studies Thuc Te (System Design Case Studies)
 
-Đây là nơi tổng hợp các bài toán thiết kế kiến trúc hệ thống thực tế từ các bài phỏng vấn kiến trúc sư hệ thống hoặc các kịch bản thực tế khi vận hành dự án lớn.
-
----
-
-## 🎯 Danh Sách Các Case Studies Để Nghiên Cứu
-
-1. **Thiết Kế Hệ Thống E-Commerce (Thương Mại Điện Tử)**:
-   * **Yêu cầu**: Xử lý lượng truy cập lớn trong giờ vàng săn sale, quản lý tồn kho nhất quán (concurrency control), thanh toán bảo mật.
-   * **Tài nguyên DevOps liên quan**: [Triển khai dự án Full-stack mẫu](../../on-premise/kubernetes/full-stack/).
-
-2. **Thiết Kế Hệ Thống Giám Sát Sức Khỏe Máy Chủ (Monitoring & Alerting)**:
-   * **Yêu cầu**: Thu thập Log, Metric từ hàng nghìn máy chủ theo thời gian thực, tự động cảnh báo qua Slack/Telegram khi CPU > 90%.
-   * **Tài nguyên DevOps liên quan**: [Triển khai Prometheus & Grafana](../../on-premise/setup/monitoring/setup-kube-prometheus-guide.md) và [Uptime Kuma](../../on-premise/setup/monitoring/setup-uptime-kuma-guide.md).
-
-3. **Thiết Thiết Kế Hệ Thống Chat Thời Gian Thực (Real-time Messaging)**:
-   * **Yêu cầu**: Kết nối WebSocket duy trì liên tục giữa hàng triệu Client, truyền tải tin nhắn độ trễ thấp, lưu trữ lịch sử hội thoại hiệu quả.
-   * **Tài nguyên DevOps liên quan**: [Cấu hình Load Balancer hỗ trợ WebSocket/Reverse Proxy](../../on-premise/nginx/).
+Day la noi tong hop cac bai toan thiet ke kien truc he thong thuc te tu cac bai phong van kien truc su he thong hoac cac kich ban thuc te khi van hanh du an lon.
 
 ---
 
-## 🚀 Cách Viết Một Case Study Chuẩn System Architect
+## Danh Sach Cac Case Studies De Nghien Cuu
 
-Khi bạn phân tích thiết kế cho bất kỳ hệ thống nào, hãy tuân theo quy trình 4 bước sau:
+1. **Thiet Ke He Thong E-Commerce (Thuong Mai Dien Tu)**:
+   * **Yeu cau**: Xu ly luong truy cap lon trong gio vang san sale, quan ly ton kho nhat quan (concurrency control), thanh toan bao mat.
+   * **Tai nguyen DevOps lien quan**: [Trien khai du an Full-stack mau](../../on-premise/kubernetes/full-stack/).
 
-1. **Bước 1: Làm rõ yêu cầu (Scope & Requirements)**:
-   * Yêu cầu chức năng (User làm được gì?)
-   * Yêu cầu phi chức năng (Quy mô hệ thống? Số lượng DAU/MAU? QPS đọc/ghi? RTO/RPO?).
-2. **Bước 2: Thiết kế sơ đồ tổng quan (High-Level Design)**:
-   * Vẽ sơ đồ luồng dữ liệu (Data Flow Diagram).
-   * Xác định các thành phần chính (Client, DNS, CDN, LB, Web Service, Cache, DB, Message Queue).
-3. **Bước 3: Đi sâu thiết kế chi tiết (Deep Dive Design)**:
-   * Cách thiết kế Schema Database, khóa chính, đánh Index.
-   * Cách tối ưu hóa tầng đệm (Caching Strategy: Cache-Aside, Write-Through).
-   * Cơ chế phòng vệ (Rate Limiter, Circuit Breaker).
-4. **Bước 4: Xác định giới hạn và đánh đổi (Bottlenecks & Trade-offs)**:
-   * Hệ thống sẽ bị nghẽn ở đâu nếu tải tăng gấp 10 lần?
-   * Tính nhất quán dữ liệu có bị suy giảm khi phân tán không? (Định lý CAP).
+2. **Thiet Ke He Thong Giam Sat Suc Khoe May Chu (Monitoring and Alerting)**:
+   * **Yeu cau**: Thu thap Log, Metric tu hang nghin may chu theo thoi gian thuc, tu dong canh bao qua Slack/Telegram khi CPU > 90%.
+   * **Tai nguyen DevOps lien quan**: [Trien khai Prometheus va Grafana](../../on-premise/setup/monitoring/setup-kube-prometheus-guide.md) va [Uptime Kuma](../../on-premise/setup/monitoring/setup-uptime-kuma-guide.md).
+
+3. **Thiet Ke He Thong Chat Thoi Gian Thuc (Real-time Messaging)**:
+   * **Yeu cau**: Ket noi WebSocket duy tri lien tuc giua hang trieu Client, truyen tai tin nhan do tre thap, luu tru lich su hoi thoai hieu qua.
+   * **Tai nguyen DevOps lien quan**: [Cau hinh Load Balancer ho tro WebSocket/Reverse Proxy](../../on-premise/nginx/).
+
+---
+
+## Cach Viet Mot Case Study Chuan System Architect
+
+Khi ban phan tich thiet ke cho bat ky he thong nao, hay tuan theo quy trinh 4 buoc sau:
+
+1. **Buoc 1: Lam ro yeu cau (Scope and Requirements)**:
+   * Yeu cau chuc nang (User lam duoc gi?)
+   * Yeu cau phi chuc nang (Quy mo he thong? So luong DAU/MAU? QPS doc/ghi? RTO/RPO?).
+2. **Buoc 2: Thiet ke so do tong quan (High-Level Design)**:
+   * Ve so do luong du lieu (Data Flow Diagram).
+   * Xac dinh cac thanh phan chinh (Client, DNS, CDN, LB, Web Service, Cache, DB, Message Queue).
+3. **Buoc 3: Di sau thiet ke chi tiet (Deep Dive Design)**:
+   * Cach thiet ke Schema Database, khoa chinh, danh Index.
+   * Cach toi uu hoa tang dem (Caching Strategy: Cache-Aside, Write-Through).
+   * Co che phong ve (Rate Limiter, Circuit Breaker).
+4. **Buoc 4: Xac dinh gioi han va danh doi (Bottlenecks and Trade-offs)**:
+   * He thong se bi nghen o dau neu tai tang gap 10 lan?
+   * Tinh nhat quan du lieu co bi suy giam khi phan tan khong? (Dinh ly CAP).
