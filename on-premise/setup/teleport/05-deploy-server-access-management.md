@@ -121,4 +121,125 @@ Dưới đây là hướng dẫn chi tiết thực hiện theo **Cách 2 (Cloudf
 
     ![Cấu hình Route Traffic](../../../images/setup/teleport_cloudflare_zt_route_traffic.png)
 
+#### 5. Cài đặt các tệp tin thực thi Teleport
+Sau khi cấu hình định tuyến và cổng kết nối thành công, chúng ta tiến hành tải và cài đặt các tệp tin thực thi (binary) của Teleport trên máy chủ đích:
+
+1.  **Tải về gói cài đặt Teleport:**
+    Sử dụng công cụ `wget` để tải phiên bản Teleport (phiên bản `v13.2.0`):
+    ```bash
+    wget https://get.gravitational.com/teleport-v13.2.0-linux-amd64-bin.tar.gz
+    ```
+
+2.  **Giải nén gói cài đặt:**
+    Giải nén tệp tin lưu trữ dạng `.tar.gz` vừa tải về:
+    ```bash
+    tar -xzf teleport-v13.2.0-linux-amd64-bin.tar.gz
+    ```
+    Sau khi giải nén, một thư mục có tên `teleport/` sẽ được tạo ra chứa các tệp tin thực thi (binary).
+
+3.  **Cài đặt các tệp tin thực thi vào hệ thống:**
+    Di chuyển các tệp thực thi chính của Teleport vào thư mục `/usr/local/bin/` để hệ điều hành có thể nhận diện lệnh ở bất cứ đâu:
+    ```bash
+    sudo mv teleport/tctl /usr/local/bin/
+    sudo mv teleport/tsh /usr/local/bin/
+    sudo mv teleport/teleport /usr/local/bin/
+    ```
+    *   **`teleport`**: Tiến trình daemon chính chạy Teleport Server.
+    *   **`tctl`**: Công cụ CLI quản trị dành cho Admin (dùng để quản lý người dùng, tạo token, quản lý node...).
+    *   **`tsh`**: Công cụ CLI Client dành cho người dùng kết nối SSH và quản trị.
+
+4.  **Xác minh cài đặt thành công:**
+    Kiểm tra phiên bản của cả 3 công cụ vừa cài đặt để đảm bảo chúng hoạt động bình thường:
+    ```bash
+    teleport version && tctl version && tsh version
+    ```
+
+5.  **Khởi tạo thư mục cấu hình:**
+    Tạo thư mục `/etc/teleport` để chuẩn bị chứa tệp tin cấu hình (`teleport.yaml`) của Teleport:
+    ```bash
+    sudo mkdir -p /etc/teleport
+    ```
+
+#### 6. Tạo file cấu hình Teleport (teleport.yaml)
+Tạo mới và chỉnh sửa tệp cấu hình cho Teleport Server tại đường dẫn `/etc/teleport/teleport.yaml`:
+```bash
+sudo vi /etc/teleport/teleport.yaml
+```
+
+Sao chép nội dung cấu hình mẫu dưới đây vào tệp tin:
+```yaml
+version: v3
+teleport:
+  nodename: teleport
+  data_dir: /var/lib/teleport
+  log:
+    output: stderr
+    severity: INFO
+    format:
+      output: text
+  ca_pin: ""
+  diag_addr: ""
+
+auth_service:
+  enabled: "yes"
+  listen_addr: 0.0.0.0:3025
+  cluster_name: teleport-onpre.h1eudayne.work
+  proxy_listener_mode: multiplex
+
+ssh_service:
+  enabled: "yes"
+
+proxy_service:
+  enabled: "yes"
+  web_listen_addr: 0.0.0.0:443
+  public_addr: teleport-onpre.h1eudayne.work:443
+  https_keypairs: []
+  https_keypairs_reload_interval: 0s
+```
+
+**Giải thích các thông số cấu hình chính:**
+*   **`teleport.nodename`**: Tên định danh của node Teleport này trong cụm (cluster).
+*   **`teleport.data_dir`**: Thư mục lưu trữ dữ liệu trạng thái, chứng chỉ CA nội bộ và thông tin phiên làm việc.
+*   **`auth_service`**: Dịch vụ xác thực (Auth Service) đóng vai trò là cơ quan cấp chứng chỉ (CA) của cụm, kiểm soát quyền truy cập và phân phối chứng chỉ cho Client/Node.
+    *   `cluster_name`: Tên cụm Teleport (trùng khớp với FQDN tên miền đã trỏ qua Cloudflare Tunnel).
+    *   `proxy_listener_mode: multiplex`: Chế độ gộp cổng (multiplexing) cho phép Proxy lắng nghe và phân luồng tất cả các loại kết nối (SSH, Web, Reverse Tunnel) đi qua một cổng duy nhất.
+*   **`ssh_service`**: Bật/Tắt dịch vụ SSH node trên chính máy chủ chạy Teleport để cho phép truy cập SSH bảo mật thông qua Teleport.
+*   **`proxy_service`**: Dịch vụ Proxy (Gateway) tiếp nhận các kết nối từ client bên ngoài (Web Browser, tsh client) và chuyển tiếp tới Auth Service hoặc các Node.
+    *   `web_listen_addr: 0.0.0.0:443`: Địa chỉ và cổng lắng nghe giao diện Web/API.
+    *   `public_addr`: Địa chỉ Public FQDN mà người dùng bên ngoài sử dụng để kết nối tới cổng Teleport.
+
+#### 7. Tạo file Service quản lý Teleport (systemd)
+Để quản lý việc khởi chạy, tự động khởi động cùng hệ thống và giám sát tiến trình của Teleport Server, chúng ta khởi tạo một dịch vụ hệ thống (systemd service).
+
+1.  **Tạo tệp dịch vụ systemd cho Teleport:**
+    Khởi tạo tệp tin dịch vụ tại `/etc/systemd/system/teleport.service`:
+    ```bash
+    sudo vi /etc/systemd/system/teleport.service
+    ```
+
+2.  **Sao chép nội dung cấu hình Service:**
+    ```ini
+    [Unit]
+    Description=Teleport Service
+    Documentation=https://gravitational.com/teleport/docs
+    After=network.target
+
+    [Service]
+    User=root
+    ExecStart=/usr/local/bin/teleport start --config=/etc/teleport/teleport.yaml
+    Restart=on-failure
+    LimitNOFILE=65536
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+3.  **Xem lại nội dung tệp tin đã tạo để xác nhận:**
+    ```bash
+    cat /etc/systemd/system/teleport.service
+    ```
+
+
+
+
 

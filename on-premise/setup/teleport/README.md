@@ -8,8 +8,8 @@ Thư mục này chứa tài liệu và cấu hình phục vụ việc triển kh
    * Đánh giá ưu/nhược điểm khi chạy Teleport On-Premise.
    * Tạo bản ghi DNS, thiết lập Nginx Load Balancer.
    * Cấu hình Port Forwarding bằng Cloudflare Tunnel (Zero Trust).
+   * Tải và cài đặt các tệp tin thực thi binary của Teleport.
+   * Khởi tạo tệp tin cấu hình `teleport.yaml` cho Teleport Server.
+   * Cấu hình file systemd service quản lý dịch vụ Teleport (`teleport.service`).
 
-2. **[Bài 6: Cài đặt Teleport](./06-install-teleport.md)**
-   * Tải và giải nén gói cài đặt binary của Teleport v13.2.0.
-   * Di chuyển các file thực thi (`teleport`, `tctl`, `tsh`) vào `/usr/local/bin/`.
-   * Khởi tạo thư mục cấu hình `/etc/teleport/`.
+
