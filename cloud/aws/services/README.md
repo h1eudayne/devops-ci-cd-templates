@@ -135,7 +135,7 @@ RDS la dich vu database quan ly cua AWS, ho tro nhieu engine nhu MySQL, PostgreS
 **Danh sach tai lieu hoc tap va huong dan chi tiet:**
 
 ### Tai lieu ly thuyet (Theory Documents)
-- [1. Amazon S3](3. S3/1. Amazon S3.md): Định nghĩa dịch vụ, các khái niệm cốt lõi (Bucket, Object, Key), tính năng nổi bật và các trường hợp sử dụng.
+- [1. Amazon S3](3. S3/1. Amazon S3.md): Định nghĩa dịch vụ, các khái niệm cốt lõi (Bucket, Object, Key), đặc trưng cơ bản (tính bất biến, dung lượng file), tính năng nổi bật và các trường hợp sử dụng.
 
 **No la gi:**
 S3 la dich vu object storage cua AWS voi do ben (durability) 99.999999999%. S3 cho phep luu tru bat ky loai file nao voi dung luong khong gioi han. No duoc su dung rong rai de luu artifact, backup, static website hosting, log storage va lam backend cho Terraform state.
