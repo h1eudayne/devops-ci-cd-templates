@@ -329,6 +329,10 @@ EFS la dich vu shared file storage (NFS) cua AWS. EFS cho phep nhieu EC2 instanc
 - [2. Amazon ELB Component](4. ELB/2. Amazon ELB Component.md): Khái niệm các thành phần cốt lõi của Load Balancer gồm Listener (Bộ lắng nghe), Rule (Quy tắc định tuyến), và Target Group (Nhóm mục tiêu).
 - [3. Amazon ELB Types](4. ELB/3. Amazon ELB Types.md): Phân loại các dòng Elastic Load Balancer (ALB, NLB, GWLB, CLB) dựa trên mô hình mạng OSI 7 layers, bảng so sánh tính năng và sơ đồ định tuyến.
 
+### Huong dan thuc hanh (Hands-on Labs)
+- [1. Amazon ELB Hands-on Lab](../deploy/4.%20ELB/1.%20Amazon%20ELB%20Hands-on%20Lab.md): Cấu hình cân bằng tải bằng Application Load Balancer (ALB) kết hợp với 2 EC2 instances chạy script User Data phân biệt.
+
+
 **No la gi:**
 ELB la dich vu phan phoi tu dong luu luong truy cap den nhieu muc tieu nhu EC2 instance, container, va IP. ELB giup dam bao tinh san sang cao (High Availability) va kha nang chiu loi (Fault Tolerance) cho he thong.
 
