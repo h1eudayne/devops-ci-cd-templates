@@ -74,7 +74,7 @@ def process_markdown_file(abs_path, rel_path):
             # URL encode each part to handle spaces
             parts = img_rel_to_root.split('/')
             encoded_parts = [urllib.parse.quote(part) for part in parts]
-            web_path = '/images/' + '/'.join(encoded_parts)
+            web_path = 'images/' + '/'.join(encoded_parts)
             return f"![{alt}]({web_path})"
         else:
             print(f"Warning: Image not found: {img_abs_path} (referenced in {rel_path})")
