@@ -37,6 +37,39 @@ def get_clean_title(content, default_name):
             return line
     return default_name
 
+SUPPORTED_CODE_EXTS = ('.yml', '.yaml', '.conf', '.sh', '.Jenkinsfile', '.jenkinsfile', '.sql', '.properties', '.json', '.service', '.xml', '.example', '.ini')
+
+def get_code_language(filename):
+    lower_name = filename.lower()
+    if lower_name.endswith(('.yml', '.yaml')):
+        return 'yaml'
+    elif lower_name.endswith('.conf'):
+        return 'nginx'
+    elif lower_name.endswith('.sh'):
+        return 'bash'
+    elif lower_name.endswith(('jenkinsfile', '.jenkinsfile')):
+        return 'groovy'
+    elif lower_name.endswith('.sql'):
+        return 'sql'
+    elif lower_name.endswith('.properties'):
+        return 'properties'
+    elif lower_name.endswith('.json'):
+        return 'json'
+    elif lower_name.endswith(('.service', '.ini')):
+        return 'ini'
+    elif lower_name.endswith('.xml'):
+        return 'xml'
+    elif lower_name.endswith('.example'):
+        base = os.path.splitext(filename)[0]
+        return get_code_language(base)
+    return 'none'
+
+def process_code_file(abs_path, rel_path):
+    """Reads a code file's raw content."""
+    with open(abs_path, 'r', encoding='utf-8', errors='replace') as f:
+        content = f.read()
+    return content
+
 def process_markdown_file(abs_path, rel_path):
     """Reads markdown file, copies referenced images, and adjusts links"""
     md_dir = os.path.dirname(abs_path)
@@ -123,11 +156,26 @@ def build_tree():
                     title, content = process_markdown_file(item_abs, item_rel)
                     docs_db[item_rel_unix] = {
                         "title": title,
-                        "content": content
+                        "content": content,
+                        "type": "markdown"
                     }
                     dir_node["children"].append({
                         "name": item,
                         "title": title,
+                        "path": item_rel_unix,
+                        "type": "file"
+                    })
+                elif item.endswith(SUPPORTED_CODE_EXTS) or item.lower() == 'jenkinsfile':
+                    content = process_code_file(item_abs, item_rel)
+                    docs_db[item_rel_unix] = {
+                        "title": item,
+                        "content": content,
+                        "type": "code",
+                        "language": get_code_language(item)
+                    }
+                    dir_node["children"].append({
+                        "name": item,
+                        "title": item,
                         "path": item_rel_unix,
                         "type": "file"
                     })
@@ -195,7 +243,7 @@ def build_tree():
         json.dump(output_data, f, ensure_ascii=False, indent=2)
         
     print(f"Successfully compiled repository data into {DATA_JSON_PATH}!")
-    print(f"Processed {len(docs_db)} markdown documents.")
+    print(f"Processed {len(docs_db)} documents (markdown and code files).")
 
 if __name__ == '__main__':
     build_tree()

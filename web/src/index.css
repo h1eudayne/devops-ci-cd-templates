@@ -1065,4 +1065,95 @@ button {
   filter: invert(0.9) hue-rotate(180deg);
 }
 
+/* ----------------------------------------------------
+   Code Viewer Layout
+   ---------------------------------------------------- */
+.code-viewer-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  margin-top: 10px;
+}
+
+.code-viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: var(--bg-surface-muted);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.code-viewer-file-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-bright);
+}
+
+.code-file-icon {
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+.code-viewer-filepath {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-bright);
+  word-break: break-all;
+}
+
+.code-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-main);
+  background-color: var(--bg-app);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.code-copy-btn:hover {
+  color: var(--text-bright);
+  background-color: var(--border-color);
+  border-color: var(--text-muted);
+}
+
+.copy-success-icon {
+  color: hsl(140, 75%, 45%);
+}
+
+.code-viewer-body {
+  padding: 0;
+  margin: 0;
+  background-color: #0d1117;
+  overflow: auto;
+}
+
+.code-viewer-body pre {
+  margin: 0;
+  padding: 20px;
+  background-color: transparent !important;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.code-viewer-body code {
+  font-family: inherit;
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+
 

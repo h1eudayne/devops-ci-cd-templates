@@ -147,7 +147,7 @@ export default function Sidebar({
       // Extract number to display
       const match = node.name.match(/^(\d+)/);
       const fileNum = match ? `${parseInt(match[1])}.` : '';
-      const displayTitle = node.title || node.name.replace('.md', '');
+      const displayTitle = node.title || node.name.replace(/\.md$/, '');
 
       return (
         <li key={node.path} className="chapter-item-container" style={{ marginLeft: depth > 0 ? '12px' : '0' }}>

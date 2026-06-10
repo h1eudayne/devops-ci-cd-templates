@@ -354,6 +354,8 @@ export default function App() {
         <ContentArea
           content={activeDoc ? activeDoc.content : ''}
           title={activeDoc ? activeDoc.title : ''}
+          type={activeDoc ? activeDoc.type : 'markdown'}
+          language={activeDoc ? activeDoc.language : ''}
           glossaryData={rawData.glossary}
           completedSections={completedSections}
           onToggleSection={handleToggleSectionComplete}
@@ -361,6 +363,8 @@ export default function App() {
           activePath={activePath}
           onShowTooltip={handleShowTooltip}
           onHideTooltip={handleHideTooltip}
+          onSelectFile={handleSelectFile}
+          availablePaths={useMemo(() => Object.keys(rawData.docs), [])}
         />
 
         <Outline
