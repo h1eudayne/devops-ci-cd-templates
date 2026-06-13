@@ -85,7 +85,7 @@ Vì môi trường Python của AWS Lambda không tích hợp sẵn thư viện 
 2. Cấu hình các thông số cơ bản:
    * Chọn **Author from scratch** (Tự viết từ đầu).
    * **Function name**: `resize-image-lambda`.
-   * **Runtime**: Chọn **Python 3.12**.
+   * **Runtime**: Chọn **Python 3.12** (hoặc Python 3.13 tùy nhu cầu).
    * **Architecture**: Chọn **x86_64**.
 3. Nhấp chọn **Create function**.
 
@@ -95,41 +95,61 @@ Vì môi trường Python của AWS Lambda không tích hợp sẵn thư viện 
 
 ---
 
-### Bước 6: Liên kết Layer và Cấu hình Function
+### Bước 6: Đưa code vào lambda
 
-#### 1. Thêm Layer Pillow vào Function
-1. Tại giao diện quản lý hàm `resize-image-lambda`, cuộn xuống dưới cùng đến mục **Layers**.
-2. Nhấp chọn **Add a layer** $\rightarrow$ Chọn **Custom layers**.
-3. Tìm và chọn Layer `python-pillow-layer` với phiên bản vừa tạo ở Bước 4. Nhấn **Add**.
+1. Mở file `lambda_function.py` trong tab **Code**.
+2. Thay thế mã mặc định bằng đoạn mã trong file [resize-image-lambda.py](resize-image-lambda.py).
+3. Nhấn nút **Deploy** để lưu và áp dụng mã nguồn mới lên AWS.
 
-#### 2. Cấu hình quyền truy cập (IAM Role) và tài nguyên (RAM/Timeout)
-1. Để Lambda đọc và ghi tệp tin lên S3, hãy đảm bảo Execution Role của hàm có quyền `s3:GetObject` và `s3:PutObject`.
-2. Tăng cấu hình tài nguyên: Chuyển sang tab **Configuration** $\rightarrow$ **General configuration** $\rightarrow$ **Edit**:
-   * **Memory**: Thiết lập tối thiểu **512 MB** (để Pillow xử lý ảnh mượt mà).
-   * **Timeout**: Tăng lên tối thiểu **30 giây** (tránh bị timeout khi xử lý ảnh dung lượng lớn).
-
-#### 3. Cập nhật mã nguồn Lambda
-1. Mở file `lambda_function.py` trong tab **Code** và dán đoạn mã nguồn sau (lấy từ [lambda_function.py](lambda_function.py)):
-   ```python
-   # Xem nội dung đầy đủ ở tệp lambda_function.py cùng thư mục
-   ```
-2. Nhấn nút **Deploy** để áp dụng thay đổi.
+<p align="center">
+  <img src="../../../../../images/aws/lambda_s3_resize_code_editor.png" alt="Đưa code mới vào Lambda và Deploy" width="750"/>
+</p>
 
 ---
 
-### Bước 7: Cấu hình S3 Event Trigger và chạy thử
+### Bước 7: Thêm Layer vào Lambda Function (Add Layer)
 
-1. Nhấp chọn **Add trigger** ở phần Function overview của Lambda Console.
-2. Chọn **S3** làm Trigger source:
-   * **Bucket**: Chọn S3 bucket của bạn.
-   * **Event types**: Chọn **All object create events**.
-   * **Prefix**: Điền `images/`.
-   * Hộp thoại cảnh báo gọi đệ quy: Tích chọn đồng ý (Acknowledge).
-3. Nhấp chọn **Add**.
-4. **Kiểm nghiệm**:
-   * Tải một ảnh `.jpg` bất kỳ lên thư mục `images/` trong S3 Bucket của bạn.
-   * Truy cập lại S3 Bucket, kiểm tra các thư mục tự động được tạo: `resized_100/`, `resized_200/`, `resized_500/`, `resized_1000/`.
-   * Kiểm tra log thực thi trên **CloudWatch Logs** để xác nhận kết quả xử lý thành công.
+1. Giao diện Function chi tiết, cuộn xuống dưới cùng mục **Layers**.
+
+<p align="center">
+  <img src="../../../../../images/aws/lambda_s3_resize_runtime_settings.png" alt="Giao diện cài đặt Layers trên Lambda Function" width="750"/>
+</p>
+
+2. Nhấp chọn nút **Edit** bên cạnh tiêu đề **Layers (0)** ở góc phải.
+3. Trong giao diện **Choose a layer**:
+   * **Layer source**: Tích chọn **Custom layers** (các layer do tài khoản của bạn tự tạo).
+   * **Custom layers**: Chọn tên layer `python-pillow-layer` từ danh sách xổ xuống.
+   * **Version**: Chọn phiên bản mới nhất bạn đã tải lên (ví dụ: `1`).
+4. Nhấn **Add**.
+
+<p align="center">
+  <img src="../../../../../images/aws/lambda_s3_resize_choose_layer.png" alt="Chọn Custom Layer Pillow và lưu lại" width="750"/>
+</p>
+
+---
+
+### Bước 8: Cấu hình S3 Event Trigger
+
+1. Tại giao diện Lambda, nhấp chọn **Add trigger** ở phần Function overview.
+2. Chọn dịch vụ **S3**.
+3. **Bucket**: Chọn S3 bucket bạn đã tạo ở Bước 1.
+4. **Event type**: Chọn **All object create events**.
+5. **Prefix**: Điền `images/` (chỉ kích hoạt khi upload vào thư mục này).
+6. **Suffix**: Điền `.jpg` (hoặc để trống để hỗ trợ nhiều định dạng ảnh).
+7. Tích chọn hộp thoại xác nhận cảnh báo gọi đệ quy (Recursive invocation).
+8. Nhấp chọn **Add**.
+
+---
+
+### Bước 9: Chạy thử và Kiểm nghiệm kết quả (Test)
+
+1. Tải một file ảnh có định dạng `.jpg` hoặc `.png` lên thư mục `images/` trong S3 Bucket của bạn. *Lưu ý: Tên ảnh không nên chứa ký tự đặc biệt!*
+2. Kiểm tra log thực thi của hàm Lambda trong **CloudWatch Logs** để xác minh quá trình xử lý hoàn tất.
+3. Xác nhận các thư mục con sau tự động được tạo và chứa các phiên bản ảnh đã resize tương ứng:
+   * `resized_100/`
+   * `resized_200/`
+   * `resized_500/`
+   * `resized_1000/`
 
 ---
 
@@ -141,11 +161,11 @@ Vì môi trường Python của AWS Lambda không tích hợp sẵn thư viện 
 
 ### 2. Lỗi: "Task timed out"
 * **Nguyên nhân**: Thời gian thực thi mặc định (3 giây) quá ngắn để xử lý tải và nén ảnh.
-* **Cách khắc phục**: Hãy tăng cấu hình timeout của Lambda lên 30 - 60 giây trong Configuration.
+* **Cách khắc phục**: Hãy tăng cấu hình timeout của Lambda lên 30 - 60 giây trong Configuration (Configuration → General configuration → Edit).
 
 ### 3. Lỗi: "Memory limit exceeded"
 * **Nguyên nhân**: Bộ nhớ mặc định (128 MB) không đủ để xử lý ảnh độ phân giải cao.
-* **Cách khắc phục**: Tăng cấu hình Memory lên tối thiểu 512 MB trong Configuration.
+* **Cách khắc phục**: Tăng cấu hình Memory lên tối thiểu 512 MB trong Configuration (Configuration → General configuration → Edit).
 
 ---
 
