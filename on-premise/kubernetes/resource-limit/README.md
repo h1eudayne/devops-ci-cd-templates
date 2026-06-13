@@ -97,6 +97,6 @@ kubectl describe pod <pod-name> -n ecommerce
 
 ```
 templates/kubernetes/resource-limit/
-├── README.md                                    <- Huong dan (file nay)
-└── deployment-with-resource-limit.yml.example  <- Deployment mau
+ README.md                                    <- Huong dan (file nay)
+ deployment-with-resource-limit.yml.example  <- Deployment mau
 ```

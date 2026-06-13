@@ -6,12 +6,12 @@ Thư mục này chứa các tài nguyên liên quan đến Amazon Web Services (
 
 ```text
 aws/
-├── services/        # Giới thiệu các dịch vụ AWS + hướng dẫn sử dụng
-│   └── README.md
-├── deploy/          # Cấu hình deploy lên AWS
-│   └── README.md
-├── templates/       # Mẫu cấu hình JSON/YAML cho các dịch vụ (S3, IAM)
-└── README.md        # (file này)
+ services/        # Giới thiệu các dịch vụ AWS + hướng dẫn sử dụng
+    README.md
+ deploy/          # Cấu hình deploy lên AWS
+    README.md
+ templates/       # Mẫu cấu hình JSON/YAML cho các dịch vụ (S3, IAM)
+ README.md        # (file này)
 ```
 
 | Thư mục | Mô tả | Khi nào vào? |

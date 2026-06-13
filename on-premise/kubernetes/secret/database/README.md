@@ -105,17 +105,17 @@ data:
 
 ```
 templates/kubernetes/
-├── secret/
-│   ├── database/
-│   │   ├── README.md                                    <- Hướng dẫn (file này)
-│   │   └── ecommerce-backend-database-connection.yml    <- Secret database
-│   └── harbor/
-│       ├── README.md                                    <- Hướng dẫn xác thực Harbor
-│       └── harbor-registry-auth.yml.example             <- Lệnh tạo Secret Harbor
-├── configmap/
-│   └── configmap-spring-properties.yml.example          <- ConfigMap tham chiếu biến
-└── deployment/
-    └── ecommerce-backend-deployment.yml.example          <- Deployment mount Secret
+ secret/
+    database/
+       README.md                                    <- Hướng dẫn (file này)
+       ecommerce-backend-database-connection.yml    <- Secret database
+    harbor/
+        README.md                                    <- Hướng dẫn xác thực Harbor
+        harbor-registry-auth.yml.example             <- Lệnh tạo Secret Harbor
+ configmap/
+    configmap-spring-properties.yml.example          <- ConfigMap tham chiếu biến
+ deployment/
+     ecommerce-backend-deployment.yml.example          <- Deployment mount Secret
 ```
 
 ---

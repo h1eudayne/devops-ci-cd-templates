@@ -150,21 +150,21 @@ Hệ thống hoạt động dựa trên các thành phần đã thiết lập tr
 
 ```text
 [NFS Server: database-server (/data)]
-               ▲
-               │ (Giao thức NFS - cổng 2049)
-               ▼
-[NFS Client: các Node k8s (nfs-common)] ──► [K8s PV: nfs-pv] ──► [K8s PVC: nfs-pvc]
-                                                                        ▲
-                                                                        │ (Volume Mount)
-                                                                        ▼
+               
+                (Giao thức NFS - cổng 2049)
+               
+[NFS Client: các Node k8s (nfs-common)]  [K8s PV: nfs-pv]  [K8s PVC: nfs-pvc]
+                                                                        
+                                                                         (Volume Mount)
+                                                                        
                                                              [StatefulSet: mariadb-0]
-                                                                        ▲
-                                                 ┌──────────────────────┴──────────────────────┐
-                                                 │                                             │
-                                                 ▼ (Cách 1 - ClusterIP)                        ▼ (Cách 2 - NodePort)
+                                                                        
+                                                 
+                                                                                              
+                                                  (Cách 1 - ClusterIP)                         (Cách 2 - NodePort)
                                      [mariadb-service: 3306]                        [mariadb-service: 31306]
-                                                 │                                             │
-                                                 ▼ (Nội bộ K8s)                                ▼ (Internet / Bên ngoài)
+                                                                                              
+                                                  (Nội bộ K8s)                                 (Internet / Bên ngoài)
                                       [Backend App / Web Pod]                       [Navicat / DBeaver / DevOps]
 ```
 

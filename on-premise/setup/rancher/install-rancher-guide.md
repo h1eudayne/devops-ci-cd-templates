@@ -4,11 +4,11 @@
 
 ```
 rancher/
-├── docker-compose/
-│   └── docker-compose.yml.example    # Cai bang Docker Compose
-├── docker-run/
-│   └── install-rancher.sh.example    # Cai bang docker run
-└── README.md
+ docker-compose/
+    docker-compose.yml.example    # Cai bang Docker Compose
+ docker-run/
+    install-rancher.sh.example    # Cai bang docker run
+ README.md
 ```
 
 ## So sanh 2 cach cai

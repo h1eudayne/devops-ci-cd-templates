@@ -25,17 +25,17 @@
 ### Mo hinh 1: 1 Master + 2 Worker
 
 ```text
-k8s-master-1 (control-plane)  ─── kubeadm init
-k8s-master-2 (worker)         ─── kubeadm join (worker)
-k8s-master-3 (worker)         ─── kubeadm join (worker)
+k8s-master-1 (control-plane)   kubeadm init
+k8s-master-2 (worker)          kubeadm join (worker)
+k8s-master-3 (worker)          kubeadm join (worker)
 ```
 
 ### Mo hinh 2: 3 Master HA (control-plane + worker)
 
 ```text
-k8s-master-1 (control-plane)  ─── kubeadm init --control-plane-endpoint --upload-certs
-k8s-master-2 (control-plane)  ─── kubeadm join --control-plane --certificate-key
-k8s-master-3 (control-plane)  ─── kubeadm join --control-plane --certificate-key
+k8s-master-1 (control-plane)   kubeadm init --control-plane-endpoint --upload-certs
+k8s-master-2 (control-plane)   kubeadm join --control-plane --certificate-key
+k8s-master-3 (control-plane)   kubeadm join --control-plane --certificate-key
 ```
 
 ## Cau hinh tai nguyen toi thieu

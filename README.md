@@ -14,35 +14,35 @@ Repository này tập trung lưu trữ, chuẩn hóa và hướng dẫn triển 
 
 ```text
 .
-├── system-design/           # Tai lieu & Kien truc System Design (Architect)
-├── roadmap/                 # Lo trinh hoc tap DevOps (Fresher, Advanced & K8s)
-├── on-premise/              # Ha tang on-premise tu quan ly
-│   ├── network/             # So do va kien truc mang noi bo
-│   ├── server/              # Quan tri may chu & VM template
-│   ├── setup/               # Huong dan cai dat theo hoc trinh & cong cu
-│   ├── workflow/            # Quy trinh van hanh
-│   ├── scripts/             # Bash scripts cai dat tu dong
-│   ├── kubernetes/          # K8s manifest templates
-│   ├── docker-compose/      # Docker Compose stacks
-│   └── nginx/               # Nginx config templates
-├── cloud/                   # Cloud providers (placeholder)
-│   ├── aws/
-│   ├── gcp/
-│   └── azure/
-├── pipelines/               # CI/CD Pipeline templates
-│   ├── gitlab-ci/
-│   ├── github-actions/
-│   └── jenkins/
-├── dockerfiles/             # Dockerfile templates
-│   ├── backend/
-│   └── frontend/
-├── docs/                    # Tai lieu bo sung
-│   ├── REPO-STRUCTURE.md
-│   ├── TEMPLATE-GUIDELINES.md
-│   └── k8s/
-├── catalog/
-│   └── templates.yml        # Danh muc template YAML
-└── .gitignore
+ system-design/           # Tai lieu & Kien truc System Design (Architect)
+ roadmap/                 # Lo trinh hoc tap DevOps (Fresher, Advanced & K8s)
+ on-premise/              # Ha tang on-premise tu quan ly
+    network/             # So do va kien truc mang noi bo
+    server/              # Quan tri may chu & VM template
+    setup/               # Huong dan cai dat theo hoc trinh & cong cu
+    workflow/            # Quy trinh van hanh
+    scripts/             # Bash scripts cai dat tu dong
+    kubernetes/          # K8s manifest templates
+    docker-compose/      # Docker Compose stacks
+    nginx/               # Nginx config templates
+ cloud/                   # Cloud providers (placeholder)
+    aws/
+    gcp/
+    azure/
+ pipelines/               # CI/CD Pipeline templates
+    gitlab-ci/
+    github-actions/
+    jenkins/
+ dockerfiles/             # Dockerfile templates
+    backend/
+    frontend/
+ docs/                    # Tai lieu bo sung
+    REPO-STRUCTURE.md
+    TEMPLATE-GUIDELINES.md
+    k8s/
+ catalog/
+    templates.yml        # Danh muc template YAML
+ .gitignore
 ```
 
 ## Giai thich tung folder
@@ -292,11 +292,11 @@ Phan `scenario` nen mo ta du 4 y:
 Dự án tích hợp một ứng dụng Web ReactJS (Vite) trong thư mục `web/` giúp hiển thị toàn bộ nội dung của repository (System Design, Roadmaps, On-Premise, Cloud) dưới dạng tài liệu tương tác chuyên nghiệp.
 
 ### Các tính năng nổi bật:
-- 🌳 **Dynamic Sidebar**: Cây thư mục đệ quy tự động hiển thị cấu trúc của repository, hỗ trợ thu gọn/mở rộng.
-- 🔍 **Tìm kiếm nhanh**: Tìm kiếm mọi tài liệu trên toàn bộ dự án theo tiêu đề và tên tệp tin.
-- 🖼️ **Image Zoomer**: Nhấp chuột vào sơ đồ bất kỳ để mở chế độ phóng to, thu nhỏ và kéo thả di chuyển.
-- 📚 **Glossary Tooltip**: Rê chuột lên các thuật ngữ kỹ thuật tiếng Anh để xem dịch nghĩa và định nghĩa tiếng Việt tức thì.
-- ✅ **Trình theo dõi tiến độ**: Đánh dấu hoàn thành cho từng chương hoặc từng phần nhỏ để lưu lại tiến trình học.
+-  **Dynamic Sidebar**: Cây thư mục đệ quy tự động hiển thị cấu trúc của repository, hỗ trợ thu gọn/mở rộng.
+-  **Tìm kiếm nhanh**: Tìm kiếm mọi tài liệu trên toàn bộ dự án theo tiêu đề và tên tệp tin.
+- ️ **Image Zoomer**: Nhấp chuột vào sơ đồ bất kỳ để mở chế độ phóng to, thu nhỏ và kéo thả di chuyển.
+-  **Glossary Tooltip**: Rê chuột lên các thuật ngữ kỹ thuật tiếng Anh để xem dịch nghĩa và định nghĩa tiếng Việt tức thì.
+-  **Trình theo dõi tiến độ**: Đánh dấu hoàn thành cho từng chương hoặc từng phần nhỏ để lưu lại tiến trình học.
 
 ### Hướng dẫn khởi chạy:
 

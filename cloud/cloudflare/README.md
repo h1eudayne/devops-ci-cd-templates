@@ -6,9 +6,9 @@ Thư mục này chứa tài liệu và cấu hình liên quan đến dịch vụ
 
 ```text
 cloud/cloudflare/
-├── README.md            # (file này)
-├── services/            # Giới thiệu các dịch vụ của Cloudflare
-└── deploy/              # File cấu hình, manifest cho cloudflared
+ README.md            # (file này)
+ services/            # Giới thiệu các dịch vụ của Cloudflare
+ deploy/              # File cấu hình, manifest cho cloudflared
 ```
 
 ## Các dịch vụ chính của Cloudflare trong DevOps

@@ -1,19 +1,21 @@
 # 4. AWS Lambda Hands-on Lab (Đọc tệp CSV từ S3 và lưu vào DynamoDB) - Hướng dẫn chi tiết
 
-👉 **[Xem Đề bài / Yêu cầu bài Lab](4.%20AWS%20Lambda%20Hands-on%20Lab%28Read%20CSV%20and%20Save%20to%20DynamoDB%29.md)**
+ **[Xem Đề bài / Yêu cầu bài Lab](4.%20AWS%20Lambda%20Hands-on%20Lab%28Read%20CSV%20and%20Save%20to%20DynamoDB%29.md)**
 
 ## II. Các bước thực hiện chi tiết
 
 ### Bước 1: Tạo bảng DynamoDB
+
 1. Truy cập **Amazon DynamoDB Console** $\rightarrow$ **Tables** $\rightarrow$ **Create table**.
 2. Thiết lập thông số:
-   * **Table name**: `Students`
-   * **Partition key**: `student_id` (Kiểu dữ liệu: **String**)
+   * **Table name**: `employee`
+   * **Partition key**: `id` (Kiểu dữ liệu: **String**)
 3. Nhấp chọn **Create table** và đợi bảng chuyển sang trạng thái *Active*.
 
 ---
 
 ### Bước 2: Tạo IAM Policy & Role cho Lambda
+
 Lambda cần quyền đọc tệp từ S3 và ghi bản ghi (PutItem) vào bảng DynamoDB.
 
 1. Truy cập **IAM Console** $\rightarrow$ **Policies** $\rightarrow$ **Create policy**.
@@ -43,7 +45,7 @@ Lambda cần quyền đọc tệp từ S3 và ghi bản ghi (PutItem) vào bản
                "Action": [
                    "dynamodb:PutItem"
                ],
-               "Resource": "arn:aws:dynamodb:*:*:table/Students"
+               "Resource": "arn:aws:dynamodb:*:*:table/employee"
            }
        ]
    }
@@ -54,10 +56,11 @@ Lambda cần quyền đọc tệp từ S3 và ghi bản ghi (PutItem) vào bản
 ---
 
 ### Bước 3: Tạo Lambda Function
+
 1. Truy cập **AWS Lambda Console** $\rightarrow$ Chọn **Create function**.
 2. Thiết lập:
-   * **Function name**: `csv-to-dynamodb-parser`.
-   * **Runtime**: Chọn **Python 3.12**.
+   * **Function name**: `s3-csv-to-dynamodb`.
+   * **Runtime**: Chọn **Python 3.12** (hoặc mới nhất).
    * **Execution role**: Chọn *Use an existing role*, chọn Role `LambdaCSVToDynamoDBRole`.
 3. Nhấn **Create function**.
 
@@ -65,59 +68,46 @@ Lambda cần quyền đọc tệp từ S3 và ghi bản ghi (PutItem) vào bản
 
 ### Bước 4: Viết mã nguồn xử lý CSV trong Lambda
 
-Chúng ta sẽ sử dụng thư viện tiêu chuẩn `csv` và `codecs` có sẵn trong runtime Python của Lambda (không cần cài thêm thư viện ngoài).
+Chúng ta sẽ sử dụng thư viện xử lý chuỗi cơ bản của Python để tách các hàng dữ liệu từ tệp CSV và đưa vào DynamoDB.
 
-1. Thay thế mã nguồn trong tệp `lambda_function.py` bằng đoạn code sau:
+1. Thay thế mã nguồn trong tệp `lambda_function.py` bằng đoạn code sau (đồng bộ hoàn toàn với tệp [s3-csv-to-dynamodb.py](s3-csv-to-dynamodb.py)):
    ```python
+   import json
    import boto3
-   import csv
-   import codecs
+   from csv import reader
 
-   # Khởi tạo clients kết nối S3 và DynamoDB
-   s3_client = boto3.client('s3')
+   s3 = boto3.client('s3')
    dynamodb = boto3.resource('dynamodb')
-   table = dynamodb.Table('Students')
+   table = dynamodb.Table('employee')
 
    def lambda_handler(event, context):
-       for record in event['Records']:
-           # Lấy thông tin bucket và key của file tải lên
-           bucket = record['s3']['bucket']['name']
-           csv_key = record['s3']['object']['key']
-           
-           # 1. Gọi S3 API lấy dữ liệu tệp tin dưới dạng stream body
-           response = s3_client.get_object(Bucket=bucket, Key=csv_key)
-           
-           # 2. Sử dụng codecs và csv.DictReader để phân tích file CSV
-           # DictReader tự động map dòng đầu tiên làm Header (Key) của Object
-           csv_reader = csv.DictReader(codecs.getreader("utf-8")(response['Body']))
-           
-           row_count = 0
-           for row in csv_reader:
-               student_id = row.get('student_id')
-               name = row.get('name')
-               age = row.get('age')
-               class_name = row.get('class')
-               
-               # Kiểm tra trường bắt buộc partition key
-               if not student_id:
-                   continue
-               
-               # 3. Ghi dữ liệu vào bảng DynamoDB
-               table.put_item(
-                   Item={
-                       'student_id': student_id,
-                       'name': name,
-                       'age': int(age) if age else 0, # Ép kiểu số nguyên cho DynamoDB
-                       'class': class_name
-                   }
-               )
-               row_count += 1
-               
-           print(f"Thành công! Đã đọc file {csv_key} từ {bucket}. Đã lưu {row_count} bản ghi vào bảng Students.")
-           
+       # Lấy thông tin bucket và key của file CSV từ event object
+       bucket = event['Records'][0]['s3']['bucket']['name']
+       key = event['Records'][0]['s3']['object']['key']
+
+       # Tải tệp CSV từ S3 xuống
+       response = s3.get_object(Bucket=bucket, Key=key)
+       content = response['Body'].read().decode('utf-8')
+       
+       # Tách file thành từng hàng dựa trên ký tự xuống dòng
+       rows = content.split("\n")
+       
+       # Lọc bỏ các dòng trống
+       users = list(filter(None, rows))
+       
+       # Duyệt qua từng dòng và lưu vào bảng DynamoDB
+       for user in users:
+           user_data = user.split(",")
+           table.put_item(Item = {
+               "id" : user_data[0],
+               "name" : user_data[1],
+               "birthday": user_data[2],
+               "salary" : user_data[3]
+           })
+       print('Finished insert data to DynamoDB')
        return {
            'statusCode': 200,
-           'body': f"Successfully processed CSV and loaded {row_count} items into DynamoDB."
+           'body': json.dumps('Successfully to processed!')
        }
    ```
 2. Nhấn nút **Deploy** để cập nhật mã nguồn.
@@ -125,29 +115,31 @@ Chúng ta sẽ sử dụng thư viện tiêu chuẩn `csv` và `codecs` có sẵ
 ---
 
 ### Bước 5: Cấu hình S3 Event Trigger
-1. Mở **S3 Console** $\rightarrow$ Click vào Bucket nguồn `h1eudayne-images-source`.
+
+1. Mở **S3 Console** $\rightarrow$ Click vào Bucket nguồn của bạn (ví dụ: `h1eudayne-images-source`).
 2. Chọn tab **Properties**, cuộn xuống phần **Event notifications** $\rightarrow$ Chọn **Create event notification**.
 3. Cấu hình:
    * **Event name**: `csv-upload-trigger`.
-   * **Suffix**: `.csv` (chỉ kích hoạt khi upload file csv).
+   * **Suffix**: `.csv` (chỉ kích hoạt khi upload file CSV).
    * **Event types**: Tích chọn **All object create events**.
-   * **Destination**: Chọn **Lambda function**, chọn hàm `csv-to-dynamodb-parser`.
-4. Nhấp chọn **Save changes**.
+   * **Destination**: Chọn **Lambda function**, chọn hàm `s3-csv-to-dynamodb` đã tạo ở Bước 3.
+4. Nhập chọn **Save changes**.
 
 ---
 
 ## III. Xác minh kết quả thực hành (Validation)
 
-1. Tạo một tệp tin trên máy tính local của bạn tên là `students_list.csv` có nội dung sau:
+1. Tạo một tệp tin trên máy tính local của bạn tên là `employee.csv` có nội dung sau (hoặc sử dụng tệp [employee.csv](employee.csv) có sẵn trong dự án):
    ```csv
-   student_id,name,age,class
-   STD001,Nguyen Van A,20,DevOps-A
-   STD002,Tran Thi B,21,DevOps-B
-   STD003,Le Van C,22,DevOps-A
+   emp-001,Linh,1992/05/06,5000000
+   emp-002,Trang,1993/06/22,6000000
+   emp-003,Thu,1994/07/18,7000000
+   emp-004,Bao,1995/08/30,5500000
+   emp-005,Duong,1996/09/28,4500000
    ```
-2. Tải tệp `students_list.csv` lên S3 Bucket nguồn `h1eudayne-images-source`.
-3. Chuyển sang **DynamoDB Console** $\rightarrow$ Chọn bảng **Students** $\rightarrow$ Nhấp chọn **Explore table items**.
-4. Bạn sẽ thấy 3 bản ghi học sinh từ file CSV đã được ghi nhận và lưu trữ chính xác trong bảng DynamoDB.
+2. Tải tệp `employee.csv` lên S3 Bucket nguồn của bạn.
+3. Chuyển sang **DynamoDB Console** $\rightarrow$ Chọn bảng **employee** $\rightarrow$ Nhấp chọn **Explore table items**.
+4. Bạn sẽ thấy các bản ghi nhân viên từ file CSV đã được tự động phân tách và lưu trữ chính xác trong bảng DynamoDB.
 
 ---
 
@@ -156,4 +148,4 @@ Chúng ta sẽ sử dụng thư viện tiêu chuẩn `csv` và `codecs` có sẵ
 
 ---
 
-👉 **[Quay lại Đề bài](4.%20AWS%20Lambda%20Hands-on%20Lab%28Read%20CSV%20and%20Save%20to%20DynamoDB%29.md)**
+ **[Quay lại Đề bài](4.%20AWS%20Lambda%20Hands-on%20Lab%28Read%20CSV%20and%20Save%20to%20DynamoDB%29.md)**

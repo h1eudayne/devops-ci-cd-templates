@@ -26,129 +26,129 @@ Repo nay duoc to chuc theo muc dich su dung, tach biet ro rang giua cac moi truo
 
 ```text
 .
-├── roadmap/                        # Lo trinh hoc tap DevOps (Fresher, Advanced & Kubernetes)
-│   ├── README.md                   # Muc luc roadmap
-│   ├── roadmap-fresher.md          # Lo trinh DevOps Fresher (35 bai)
-│   ├── roadmap-kubernetes.md       # Lo trinh Kubernetes (43 bai)
-│   └── roadmap-advanced.md         # Lo trinh DevOps Nang cao (tung buoc cap nhat)
-├── on-premise/
-│   ├── network/                        # Kien truc mang noi bo (On-premise & Cloud)
-│   │   ├── README.md                   # Muc luc va gioi thieu
-│   │   ├── 01-intranet-network-model.md
-│   │   └── 02-environment-initialization-notes.md
-│   ├── server/                         # Quan tri may chu & VM template
-│   │   ├── README.md                   # Muc luc va gioi thieu
-│   │   ├── 03-setup-server-template.md
-│   │   └── 04-server-access-management.md
-│   ├── setup/                          # Huong dan cai dat theo hoc trinh & cong cu
-│   │   ├── 01-linux-server/            # Bai 1-7: Ubuntu, lenh, vim, phan quyen
-│   │   ├── 02-manual-deployment/       # Bai 8-10: Trien khai thu cong FE, Java Spring
-│   │   ├── 03-gitlab/                  # Bai 11-17, 26: Gitlab server, Gitlab CI/CD
-│   │   ├── 04-docker-registry/         # Bai 18-25: Docker runtime, Harbor registry
-│   │   ├── 05-jenkins/                 # Bai 27-32: Jenkins CI/CD
-│   │   ├── 06-monitoring/              # Bai 33-35: Zabbix, Kube-Prometheus, Uptime Kuma
-│   │   ├── certbot/                    # Cau hinh va xin SSL Let's Encrypt
-│   │   │   └── README.md
-│   │   ├── kubernetes/                 # Huong dan K8s nang cao (da hoan thien)
-│   │   ├── mysql/                      # Cau hinh database
-│   │   ├── rancher/                    # Cong cu quan ly K8s
-│   │   ├── storage/                    # Ha tang luu tru (NFS)
-│   │   └── teleport/                   # Setup cong cu quan ly server Teleport
-│   │       ├── README.md
-│   │       ├── 05-deploy-server-access-management-onpremise.md
-│   │       ├── 05-deploy-server-access-management-cloud.md
-│   │       └── templates/
-│   │           ├── teleport.yaml.template
-│   │           ├── teleport.service.template
-│   │           └── nginx-teleport-lb.conf.template
+ roadmap/                        # Lo trinh hoc tap DevOps (Fresher, Advanced & Kubernetes)
+    README.md                   # Muc luc roadmap
+    roadmap-fresher.md          # Lo trinh DevOps Fresher (35 bai)
+    roadmap-kubernetes.md       # Lo trinh Kubernetes (43 bai)
+    roadmap-advanced.md         # Lo trinh DevOps Nang cao (tung buoc cap nhat)
+ on-premise/
+    network/                        # Kien truc mang noi bo (On-premise & Cloud)
+       README.md                   # Muc luc va gioi thieu
+       01-intranet-network-model.md
+       02-environment-initialization-notes.md
+    server/                         # Quan tri may chu & VM template
+       README.md                   # Muc luc va gioi thieu
+       03-setup-server-template.md
+       04-server-access-management.md
+    setup/                          # Huong dan cai dat theo hoc trinh & cong cu
+       01-linux-server/            # Bai 1-7: Ubuntu, lenh, vim, phan quyen
+       02-manual-deployment/       # Bai 8-10: Trien khai thu cong FE, Java Spring
+       03-gitlab/                  # Bai 11-17, 26: Gitlab server, Gitlab CI/CD
+       04-docker-registry/         # Bai 18-25: Docker runtime, Harbor registry
+       05-jenkins/                 # Bai 27-32: Jenkins CI/CD
+       06-monitoring/              # Bai 33-35: Zabbix, Kube-Prometheus, Uptime Kuma
+       certbot/                    # Cau hinh va xin SSL Let's Encrypt
+          README.md
+       kubernetes/                 # Huong dan K8s nang cao (da hoan thien)
+       mysql/                      # Cau hinh database
+       rancher/                    # Cong cu quan ly K8s
+       storage/                    # Ha tang luu tru (NFS)
+       teleport/                   # Setup cong cu quan ly server Teleport
+           README.md
+           05-deploy-server-access-management-onpremise.md
+           05-deploy-server-access-management-cloud.md
+           templates/
+               teleport.yaml.template
+               teleport.service.template
+               nginx-teleport-lb.conf.template
 
 
 
-│   ├── workflow/                       # Quy trinh van hanh
-│   │   └── kubernetes/
-│   ├── scripts/                        # Bash scripts
-│   │   ├── kubernetes/
-│   │   ├── metrics-server/
-│   │   ├── nfs/
-│   │   ├── docker/
-│   │   ├── harbor/
-│   │   ├── helm/
-│   │   ├── ingress-nginx/
-│   │   ├── jenkins/
-│   │   ├── rancher/
-│   │   └── storage/
-│   ├── kubernetes/                     # K8s manifests
-│   │   ├── full-stack/
-│   │   ├── hpa/
-│   │   ├── service/
-│   │   ├── statefulset/
-│   │   ├── storage/
-│   │   ├── redis/
-│   │   ├── deployment/
-│   │   ├── configmap/
-│   │   ├── ingress/
-│   │   ├── load-balancer/
-│   │   ├── resource-limit/
-│   │   └── secret/
-│   ├── docker-compose/                 # Docker Compose stacks
-│   └── nginx/                          # Nginx configs
-│       ├── jenkins-subdomain.conf.example
-│       ├── react-spa-port-3000.conf
-│       └── teleport-lb.conf.template
-├── cloud/
-│   ├── aws/
-│   ├── gcp/
-│   ├── azure/
-│   └── cloudflare/                     # Dich vu Cloudflare (DNS, Tunnel, WAF)
-│       ├── README.md
-│       ├── services/
-│       │   ├── README.md
-│       │   ├── 1. DNS/
-│       │   │   └── 1. Cloudflare DNS Management.md
-│       │   └── 2. Zero Trust/
-│       │       └── 2. Cloudflare Zero Trust Tunnel.md
-│       └── deploy/
-├── pipelines/
-│   ├── gitlab-ci/
-│   │   ├── continuous-integration/
-│   │   │   ├── java/
-│   │   │   ├── nodejs/
-│   │   │   ├── python/
-│   │   │   ├── dotnet/
-│   │   │   ├── go/
-│   │   │   ├── php/
-│   │   │   └── docker/
-│   │   ├── continuous-delivery/
-│   │   │   ├── java/
-│   │   │   ├── nodejs/
-│   │   │   ├── python/
-│   │   │   ├── dotnet/
-│   │   │   ├── go/
-│   │   │   ├── php/
-│   │   │   └── docker/
-│   │   └── continuous-deployment/
-│   │       ├── java/
-│   │       ├── nodejs/
-│   │       ├── python/
-│   │       ├── dotnet/
-│   │       ├── go/
-│   │       ├── php/
-│   │       └── docker/
-│   ├── github-actions/
-│   │   ├── continuous-integration/
-│   │   ├── continuous-delivery/
-│   │   └── continuous-deployment/
-│   └── jenkins/
-│       ├── continuous-integration/
-│       ├── continuous-delivery/
-│       ├── continuous-deployment/
-│       ├── install/
-│       └── reverse-proxy/
-├── dockerfiles/
-│   ├── backend/
-│   └── frontend/
-├── docs/
-└── catalog/
+    workflow/                       # Quy trinh van hanh
+       kubernetes/
+    scripts/                        # Bash scripts
+       kubernetes/
+       metrics-server/
+       nfs/
+       docker/
+       harbor/
+       helm/
+       ingress-nginx/
+       jenkins/
+       rancher/
+       storage/
+    kubernetes/                     # K8s manifests
+       full-stack/
+       hpa/
+       service/
+       statefulset/
+       storage/
+       redis/
+       deployment/
+       configmap/
+       ingress/
+       load-balancer/
+       resource-limit/
+       secret/
+    docker-compose/                 # Docker Compose stacks
+    nginx/                          # Nginx configs
+        jenkins-subdomain.conf.example
+        react-spa-port-3000.conf
+        teleport-lb.conf.template
+ cloud/
+    aws/
+    gcp/
+    azure/
+    cloudflare/                     # Dich vu Cloudflare (DNS, Tunnel, WAF)
+        README.md
+        services/
+           README.md
+           1. DNS/
+              1. Cloudflare DNS Management.md
+           2. Zero Trust/
+               2. Cloudflare Zero Trust Tunnel.md
+        deploy/
+ pipelines/
+    gitlab-ci/
+       continuous-integration/
+          java/
+          nodejs/
+          python/
+          dotnet/
+          go/
+          php/
+          docker/
+       continuous-delivery/
+          java/
+          nodejs/
+          python/
+          dotnet/
+          go/
+          php/
+          docker/
+       continuous-deployment/
+           java/
+           nodejs/
+           python/
+           dotnet/
+           go/
+           php/
+           docker/
+    github-actions/
+       continuous-integration/
+       continuous-delivery/
+       continuous-deployment/
+    jenkins/
+        continuous-integration/
+        continuous-delivery/
+        continuous-deployment/
+        install/
+        reverse-proxy/
+ dockerfiles/
+    backend/
+    frontend/
+ docs/
+ catalog/
 ```
 
 ## Quy tac phan loai pipeline

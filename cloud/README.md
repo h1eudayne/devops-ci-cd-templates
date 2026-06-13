@@ -6,23 +6,23 @@ Thu muc nay chua cac tai nguyen DevOps cho cac nha cung cap Cloud (AWS, GCP, Azu
 
 ```text
 cloud/
-├── aws/
-│   ├── services/        # Dich vu AWS la gi + huong dan
-│   ├── deploy/          # Cau hinh deploy len AWS
-│   └── README.md
-├── gcp/
-│   ├── services/        # Dich vu GCP la gi + huong dan
-│   ├── deploy/          # Cau hinh deploy len GCP
-│   └── README.md
-├── azure/
-│   ├── services/        # Dich vu Azure la gi + huong dan
-│   ├── deploy/          # Cau hinh deploy len Azure
-│   └── README.md
-├── cloudflare/
-│   ├── README.md        # Gioi thieu dich vu (DNS, Tunnel, WAF)
-│   ├── services/
-│   └── deploy/
-└── README.md            # (file nay)
+ aws/
+    services/        # Dich vu AWS la gi + huong dan
+    deploy/          # Cau hinh deploy len AWS
+    README.md
+ gcp/
+    services/        # Dich vu GCP la gi + huong dan
+    deploy/          # Cau hinh deploy len GCP
+    README.md
+ azure/
+    services/        # Dich vu Azure la gi + huong dan
+    deploy/          # Cau hinh deploy len Azure
+    README.md
+ cloudflare/
+    README.md        # Gioi thieu dich vu (DNS, Tunnel, WAF)
+    services/
+    deploy/
+ README.md            # (file nay)
 ```
 
 ## Giai thich 2 folder con
