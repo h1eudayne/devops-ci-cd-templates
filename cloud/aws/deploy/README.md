@@ -119,6 +119,7 @@ Các hướng dẫn thực hành quản lý và thao tác với cơ sở dữ li
 | File | Mô tả | Công nghệ |
 |------|-------|-----------|
 | [1. Amazon DynamoDB Hands-on Lab(Basic)](6.%20DynamoDB/1.%20Amazon%20DynamoDB%20Hands-on%20Lab%28Basic%29.md) | Thực hành tạo bảng student với Partition Key (id) và Sort Key (name), nhập các dữ liệu học sinh với cấu trúc động và trường tùy biến | AWS DynamoDB, AWS Console, NoSQL |
+| [2. Amazon DynamoDB Hands-on Lab(Index)](6.%20DynamoDB/2.%20Amazon%20DynamoDB%20Hands-on%20Lab%28Index%29.md) | Thực hành tạo Global Secondary Index (GSI) với partition key (name) và sort key (birthday), truy vấn kiểm nghiệm dữ liệu qua GSI | AWS DynamoDB, AWS Console, Index |
 
 ---
 
@@ -166,6 +167,7 @@ cloud/aws/deploy/
     3. Amazon Aurora Hands-on Lab(Backtrack).md
   6. DynamoDB/
     1. Amazon DynamoDB Hands-on Lab(Basic).md
+    2. Amazon DynamoDB Hands-on Lab(Index).md
   README.md
 ```
 
