@@ -145,8 +145,22 @@ Ta cần cấu hình để khi tải file CSV vào đúng thư mục chỉ đị
    emp-005,Duong,1996/09/28,4500000
    ```
 3. Tải tệp `employee.csv` lên thư mục `employee_csv/` trong S3 Bucket nguồn của bạn.
-4. Chuyển sang **DynamoDB Console** $\rightarrow$ Chọn bảng **employee** $\rightarrow$ Nhấp chọn **Explore table items**.
-5. Bạn sẽ thấy các bản ghi nhân viên từ file CSV đã được tự động phân tách và lưu trữ chính xác trong bảng DynamoDB với partition key `id` và sort key `name` tương ứng.
+
+<p align="center">
+  <img src="../../../../../images/aws/lambda_csv_s3_upload.png" alt="Tải tệp employee.csv lên S3 Bucket" width="700"/>
+</p>
+
+4. Truy cập **CloudWatch Console** $\rightarrow$ **Logs** $\rightarrow$ **Log groups** $\rightarrow$ Chọn Log group `/aws/lambda/csv-to-dynamodb` và kiểm tra Log stream mới nhất. Bạn sẽ thấy dòng log `Finished insert data to DynamoDB` được in ra, báo hiệu hàm Lambda đã chạy thành công.
+
+<p align="center">
+  <img src="../../../../../images/aws/lambda_csv_cloudwatch_logs.png" alt="Kiểm tra CloudWatch Log của Lambda" width="700"/>
+</p>
+
+5. Chuyển sang **DynamoDB Console** $\rightarrow$ Chọn bảng **employee** $\rightarrow$ Nhấp chọn **Explore table items**. Bạn sẽ thấy các bản ghi nhân viên từ file CSV đã được tự động phân tách và lưu trữ chính xác trong bảng DynamoDB với partition key `id` và sort key `name` tương ứng.
+
+<p align="center">
+  <img src="../../../../../images/aws/lambda_csv_dynamodb_items.png" alt="Các bản ghi được lưu trữ thành công trong bảng DynamoDB employee" width="700"/>
+</p>
 
 ---
 
